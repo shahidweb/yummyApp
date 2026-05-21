@@ -15,7 +15,7 @@ function Banner() {
         <h1 className="text-4xl font-bold md:text-6x1 leading-tight">
           Order your favourite food here
         </h1>
-        <p className="mt-4 text-sm md:text-base leading-7 text-gray-100">
+        <p className="mt-4 text-sm md:text-base leading-7 text-gray-100 hidden md:block">
           Choose from a diverse menu featuring a delectable array of dished
           crafted wit the finest ingredeints and culinary expertiese. Our
           mission is to satisfy your cravings and elevate your dining

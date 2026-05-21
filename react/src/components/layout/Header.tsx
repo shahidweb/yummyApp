@@ -10,7 +10,7 @@ function Header() {
     { id: 4, name: "contact us", path: "/contact-us" },
   ];
   return (
-    <div className="max-w-7xl mx-auto py-5">
+    <div className="max-w-7xl mx-auto py-5 px-5">
       <header className="flex items-center justify-between">
         {/* logo */}
         <h1 className="cursor-pointer text-3xl font-bold text-orange-600">

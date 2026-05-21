@@ -27,12 +27,12 @@ function ProductFilter() {
   return (
     <div>
       <h1 className="font-bold text-gray-900 text-3xl mt-5">Explore or menu</h1>
-      <p className="text-gray-900 w-3/5 mt-3">
+      <p className="text-gray-900 lg:w-3/5 mt-3">
         Choose from a diverse menu featuring a delectable array of dishes. Our
         mission is to satisfy your cravings and elavate your dining experience,
         one delicious meal at a time
       </p>
-      <ul className="flex items-center justify-between mt-5">
+      <ul className="flex items-center gap-6 mt-5 overflow-x-auto scrollbar-hide">
         {filters.map((item) => (
           <li
             key={item.id}
@@ -40,9 +40,10 @@ function ProductFilter() {
             onClick={() => selectFilterId(item.id)}
           >
             <img
-              className={`rounded-full hover:border-orange-600 hover:border-3 ${selectedItem === item.id ? "border-3 border-orange-600" : ""}`}
+              className={`w-20 h-20 md:w-full md:h-full object-cover mb-3 rounded-full hover:border-orange-600 hover:border-3 ${selectedItem === item.id ? "border-3 border-orange-600" : ""}`}
               src={item.img}
               alt={item.name}
+              width="100px"
             />
             <span className="text-gray-600">{item.name}</span>
           </li>

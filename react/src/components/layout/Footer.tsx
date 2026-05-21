@@ -2,7 +2,7 @@ function Footer() {
   return (
     //  w-full fixed bottom-0
     <div className="bg-gray-900"> 
-      <footer className="max-w-7xl mx-auto py-10">
+      <footer className="max-w-7xl mx-auto py-10 px-5">
         <div className="flex flex-col md:flex-row items-start justify-between gap-12">
           <div>
             <h1 className="cursor-pointer text-3xl font-bold text-orange-600">
