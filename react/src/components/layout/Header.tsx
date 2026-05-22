@@ -1,8 +1,12 @@
 import { NavLink } from "react-router-dom";
 import CartIcon from "../../shared/utils/icons/Cart";
 import SearchIcon from "../../shared/utils/icons/Search";
+import Login from "./Login";
+import DialogModel from "../UI/DialogModel";
+import { useState } from "react";
 
 function Header() {
+  const [isOpen, setIsOpen] = useState(false);
   const navs = [
     { id: 1, name: "home", path: "/" },
     { id: 2, name: "menu", path: "/menu" },
@@ -43,7 +47,7 @@ function Header() {
           <button aria-label="Cart">
             <CartIcon />
           </button>
-          <button
+          <button onClick={() => setIsOpen(true)}
             aria-label="Search"
             className="cursor-pointer rounded-3xl border px-4 py-1 hover:bg-orange-600 hover:text-white transition"
           >
@@ -51,6 +55,9 @@ function Header() {
           </button>
         </div>
       </header>
+      <DialogModel isOpen={isOpen}>
+        <Login onClose={() => setIsOpen(false)} />
+      </DialogModel>
     </div>
   );
 }
