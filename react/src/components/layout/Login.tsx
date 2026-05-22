@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -16,8 +17,13 @@ function Login({ onClose }: any) {
     formState: { errors },
   } = useForm<formInput>();
 
-  const OnSubmitHandler = (data: formInput) => {
+  const OnSubmitHandler = async(data: formInput) => {
     console.log(data);
+    const response = await axios.post(
+      "http://localhost:5000/api/v1/login",
+      data,
+    );
+    console.log(response.data);
     onClose();
   };
   return (
