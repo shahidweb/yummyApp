@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import cors from 'cors'
 
 import express from 'express';
 import connectDB from './db/config.ts';
@@ -9,6 +10,7 @@ import productRoutes from './routes/product.ts'
 const app = express();
 const PORT = process.env.PORT
 
+app.use(cors())
 app.use(express.json());
 connectDB();
 

@@ -44,13 +44,15 @@ export const login = async (req: Request, res: Response) => {
         if (!process.env.SECRET_KEY) {
             throw new Error("SECRET_KEY missing");
         }
-        console.log('ss')
 
         const token = jwt.sign({ id: existingUser._id, email: existingUser.email }, process.env.SECRET_KEY, { expiresIn: '1h' })
 
-        return res.status(200).json({
-            success: true, token
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
         })
+        return res.status(200).json({ message: "login successfully" })
 
     }
     catch (error) {
