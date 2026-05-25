@@ -10,8 +10,11 @@ import productRoutes from './routes/product.ts'
 const app = express();
 const PORT = process.env.PORT
 
-app.use(cors())
 app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:5173', // Explicitly mirror your frontend origin
+    credentials: true                // Allow cookies/headers to accompany the request
+}));
 connectDB();
 
 app.get('/', (req, res) => {
