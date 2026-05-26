@@ -47,15 +47,38 @@ export const login = async (req: Request, res: Response) => {
 
         const token = jwt.sign({ id: existingUser._id, email: existingUser.email }, process.env.SECRET_KEY, { expiresIn: '1h' })
 
-        res.cookie("token", token, {
+        res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-        })
+            secure: false,        // MUST be false on localhost (true requires HTTPS)
+            sameSite: 'lax',      // Allows cross-origin requests from 5173 to 5000
+            maxAge: 24 * 60 * 60 * 1000 // 1 day expiration
+        });
         return res.status(200).json({ message: "login successfully" })
 
     }
     catch (error) {
+        return res.status(500).json({
+            message: "Internal server error",
+            error
+        });
+    }
+}
+
+export const me = async (req: Request, res: Response) => {
+    try {
+        const { id } = (req as any).user;
+        const users = await User.find({ _id: id }).select('_id name email role');
+        if (!users) {
+            res.clearCookie('token');
+            return res.status(500).json({
+                success: false,
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            users
+        })
+    } catch (error) {
         return res.status(500).json({
             message: "Internal server error",
             error
