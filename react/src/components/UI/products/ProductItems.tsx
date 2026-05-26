@@ -1,22 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import greekSalad from "../../../assets/greeksalad.png";
+import { apiService } from "../../../shared/services/genericService";
+
+type IProduct = {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  rating: number;
+  category: string;
+  image: string;
+  qty: number;
+};
 
 function ProductItems() {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Greek salad",
-      price: 12,
-      description:
-        "food prodivdes essential nutrients for overall health and well-being",
-      rating: 3,
-      category: "Chinese",
-      image: greekSalad,
-      qty: 1,
-    },
-  ]);
+  const [products, setProducts] = useState<IProduct[]>([]);
 
-  const onQtyHandler = (id: number, type: "inc" | "dec" = "inc") => {
+  useEffect(() => {
+    fetchProduct();
+  }, []);
+
+  const fetchProduct = async () => {
+    try {
+      const response = await apiService.get<IProduct[]>("product");
+      const res = response.map((item) => {
+        return {
+          ...item,
+          image: greekSalad,
+          qty: 0,
+        };
+      });
+      setProducts(res);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const onQtyHandler = (id: string, type: "inc" | "dec" = "inc") => {
     setProducts((prev) =>
       prev.map((product) =>
         product.id === id

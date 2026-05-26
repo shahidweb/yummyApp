@@ -1,6 +1,7 @@
-import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { fetchUser } from "../../shared/services/loginService";
+import { apiService } from "../../shared/services/genericService";
 
 type formInput = {
   name?: string;
@@ -17,15 +18,22 @@ function Login({ onClose }: any) {
     formState: { errors },
   } = useForm<formInput>();
 
-  const OnSubmitHandler = async(data: formInput) => {
-    console.log(data);
-    const response = await axios.post(
-      "http://localhost:5000/api/v1/login",
+  const OnSubmitHandler = async (data: formInput) => {
+    const response = await apiService.post(
+      `${isLogin ? "login" : "register"}`,
       data,
     );
-    console.log(response.data);
+    console.log(response);
+    if (response) {
+      fetchUser();
+    }
     onClose();
   };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
     <div className="modal">
       <div className="flex items-center justify-between mb-6">
