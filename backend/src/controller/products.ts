@@ -4,8 +4,13 @@ import mongoose from "mongoose";
 
 export const getProducts = async (req: Request, res: Response) => {
     try {
-        const allProducts = await Product.find();
-        return res.status(200).json(allProducts)
+        const allProducts = await Product.find().select('-__v').lean();
+        const result = allProducts.map(({ _id, ...rest }) => ({
+            ...rest,
+            id: _id
+        }));
+
+        return res.status(200).json(result)
     } catch (error: any) {
         return res.status(500).json({
             message: "Internal server error",
