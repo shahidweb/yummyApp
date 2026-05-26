@@ -6,15 +6,6 @@ const api = axios.create({
     withCredentials: true,
 })
 
-// api.interceptors.request.use((config) => {
-//     const token = localStorage.getItem('token');
-//     if (token) {
-//         config.headers.set("Authorization", `Beared ${token}`)
-//     }
-//     return config;
-// })
-
-
 export const apiService = {
     get: async<T>(url: string): Promise<T> => {
         const response = await api.get<T>(url);

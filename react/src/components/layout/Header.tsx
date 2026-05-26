@@ -3,7 +3,8 @@ import CartIcon from "../../shared/utils/icons/Cart";
 import SearchIcon from "../../shared/utils/icons/Search";
 import Login from "./Login";
 import DialogModel from "../UI/DialogModel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchUser } from "../../shared/services/loginService";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +14,11 @@ function Header() {
     { id: 3, name: "mobile app", path: "/app" },
     { id: 4, name: "contact us", path: "/contact-us" },
   ];
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto py-5 px-5">
       <header className="flex items-center justify-between">
@@ -47,7 +53,8 @@ function Header() {
           <button aria-label="Cart">
             <CartIcon />
           </button>
-          <button onClick={() => setIsOpen(true)}
+          <button
+            onClick={() => setIsOpen(true)}
             aria-label="Search"
             className="cursor-pointer rounded-3xl border px-4 py-1 hover:bg-orange-600 hover:text-white transition"
           >
