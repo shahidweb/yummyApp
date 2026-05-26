@@ -10,12 +10,14 @@ import productRoutes from './routes/product.ts'
 const app = express();
 const PORT = process.env.PORT
 
-app.use(express.json());
-app.use(cors({
-    origin: 'http://localhost:5173', // Explicitly mirror your frontend origin
-    credentials: true                // Allow cookies/headers to accompany the request
-}));
 app.use(cookieParser())
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    })
+);
+app.use(express.json());
 connectDB();
 
 app.get('/', (req, res) => {
