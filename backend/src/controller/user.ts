@@ -36,10 +36,10 @@ export const login = async (req: Request, res: Response) => {
             })
 
         const existingUser = await User.findOne({ email });
-        if (!existingUser) return res.status(401).send('Invalid credential');
+        if (!existingUser) return res.status(401).json({ message: 'Invalid credential' });
 
         const matchPassword = await bcrypt.compare(password, existingUser.password);
-        if (!matchPassword) return res.status(400).send('Invalid credential');
+        if (!matchPassword) return res.status(400).json({ message: 'Invalid credential' });
 
         if (!process.env.SECRET_KEY) {
             throw new Error("SECRET_KEY missing");
@@ -53,7 +53,7 @@ export const login = async (req: Request, res: Response) => {
             sameSite: 'lax',      // Allows cross-origin requests from 5173 to 5000
             maxAge: 24 * 60 * 60 * 1000 // 1 day expiration
         });
-        return res.status(200).json({ message: "login successfully" })
+        return res.status(200).json({ success: true, message: "login successfully" })
 
     }
     catch (error) {
@@ -76,7 +76,7 @@ export const me = async (req: Request, res: Response) => {
         }
         return res.status(200).json({
             success: true,
-            users
+            user: users[0],
         })
     } catch (error) {
         return res.status(500).json({

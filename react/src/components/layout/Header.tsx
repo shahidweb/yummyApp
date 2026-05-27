@@ -1,23 +1,19 @@
+import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from "@heroicons/react/16/solid";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import CartIcon from "../../shared/utils/icons/Cart";
-import SearchIcon from "../../shared/utils/icons/Search";
-import Login from "./Login";
+import { useAuth } from "../../context/AuthContext";
 import DialogModel from "../UI/DialogModel";
-import { useEffect, useState } from "react";
-import { fetchUser } from "../../shared/services/loginService";
+import Login from "./Login";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
   const navs = [
     { id: 1, name: "home", path: "/" },
     { id: 2, name: "menu", path: "/menu" },
     { id: 3, name: "mobile app", path: "/app" },
     { id: 4, name: "contact us", path: "/contact-us" },
   ];
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
 
   return (
     <div className="max-w-7xl mx-auto py-5 px-5">
@@ -48,18 +44,20 @@ function Header() {
         {/* Actions */}
         <div className="flex items-center gap-6">
           <button aria-label="Search">
-            <SearchIcon />
+            <MagnifyingGlassIcon className="w-6 h-6 hover:text-orange-500 cursor-pointer" />
           </button>
           <button aria-label="Cart">
-            <CartIcon />
+            <ShoppingCartIcon className="w-6 h-6 hover:text-orange-500 cursor-pointer" />
           </button>
-          <button
+          {!user ? <button
             onClick={() => setIsOpen(true)}
             aria-label="Search"
             className="cursor-pointer rounded-3xl border px-4 py-1 hover:bg-orange-600 hover:text-white transition"
           >
             sign in
-          </button>
+          </button> :
+            <UserIcon className="w-6 h-6 text-gray-700 cursor-pointer" />
+          }
         </div>
       </header>
       <DialogModel isOpen={isOpen}>
