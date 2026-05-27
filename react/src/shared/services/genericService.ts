@@ -1,10 +1,24 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
+export type APIResponse<T> = {
+    success: boolean;
+    message: string;
+    data: T
+}
 
 const api = axios.create({
     baseURL: 'http://localhost:5000/api/v1/',
     withCredentials: true,
 })
+
+api.interceptors.response.use(
+    res => res,
+    (error) => {
+        const err = error as AxiosError<{ message?: string }>
+        const message = err.response?.data.message || "Something went wrong"
+        return Promise.reject(new Error(message))
+    }
+)
 
 export const apiService = {
     get: async<T>(url: string): Promise<T> => {

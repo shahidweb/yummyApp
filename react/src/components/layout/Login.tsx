@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { fetchUser } from "../../shared/services/loginService";
-import { apiService } from "../../shared/services/genericService";
+import { apiService, type APIResponse } from "../../shared/services/genericService";
+import { useAuth } from "../../context/AuthContext";
 
 type formInput = {
   name?: string;
@@ -11,6 +11,7 @@ type formInput = {
 
 function Login({ onClose }: any) {
   const [isLogin, setIsLogin] = useState(true);
+  const { fetchUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -19,20 +20,19 @@ function Login({ onClose }: any) {
   } = useForm<formInput>();
 
   const OnSubmitHandler = async (data: formInput) => {
-    const response = await apiService.post(
-      `${isLogin ? "login" : "register"}`,
-      data,
-    );
-    console.log(response);
-    if (response) {
-      fetchUser();
+    try {
+      const response = await apiService.post<APIResponse<null>, formInput>(`${isLogin ? "login" : "register"}`, data);
+      if (response && response.success) {
+        await fetchUser()
+      }
+      onClose();
+    } catch (error) {
+      const err = error as Error;
+      alert(err.message);
+      onClose();
     }
-    onClose();
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
 
   return (
     <div className="modal">
