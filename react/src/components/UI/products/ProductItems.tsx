@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import greekSalad from "../../../assets/greeksalad.png";
 import { apiService } from "../../../shared/services/genericService";
+import { decreaseQty, increaseQty } from "../../../store/cartSlice";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../../../store/store";
 
 type IProduct = {
   id: string;
@@ -15,6 +18,7 @@ type IProduct = {
 
 function ProductItems() {
   const [products, setProducts] = useState<IProduct[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     fetchProduct();
@@ -41,13 +45,16 @@ function ProductItems() {
       prev.map((product) =>
         product.id === id
           ? {
-              ...product,
-              qty:
-                type === "inc" ? product.qty + 1 : Math.max(product.qty - 1, 0),
-            }
+            ...product,
+            qty:
+              type === "inc" ? product.qty + 1 : Math.max(product.qty - 1, 0),
+          }
           : product,
       ),
     );
+    if (type == 'inc') {
+      dispatch(increaseQty({ _id: id, qty: 0 }))
+    } else dispatch(decreaseQty({ _id: id, qty: 0 }))
   };
 
   return (

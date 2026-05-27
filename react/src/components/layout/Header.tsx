@@ -4,10 +4,13 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import DialogModel from "../UI/DialogModel";
 import Login from "./Login";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../store/store";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
+  const cartItems = useSelector((state: RootState) => state.cart.items)
   const navs = [
     { id: 1, name: "home", path: "/" },
     { id: 2, name: "menu", path: "/menu" },
@@ -48,6 +51,9 @@ function Header() {
           </button>
           <button aria-label="Cart">
             <ShoppingCartIcon className="w-6 h-6 hover:text-orange-500 cursor-pointer" />
+            {cartItems.length >= 1 && <>
+              <span className="text-red-800">*</span>
+            </>}
           </button>
           {!user ? <button
             onClick={() => setIsOpen(true)}
