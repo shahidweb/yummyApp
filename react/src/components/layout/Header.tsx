@@ -2,12 +2,15 @@ import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from "@heroicons/reac
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useAppSelector } from "../../store/hooks";
+import { selectCartItems } from "../../store/selectors/cartSelectors";
 import DialogModel from "../UI/DialogModel";
 import Login from "./Login";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
+  const cartItems = useAppSelector(selectCartItems)
   const navs = [
     { id: 1, name: "home", path: "/" },
     { id: 2, name: "menu", path: "/menu" },
@@ -48,6 +51,9 @@ function Header() {
           </button>
           <button aria-label="Cart">
             <ShoppingCartIcon className="w-6 h-6 hover:text-orange-500 cursor-pointer" />
+            {cartItems.length >= 1 && <>
+              <span className="text-red-800">*</span>
+            </>}
           </button>
           {!user ? <button
             onClick={() => setIsOpen(true)}
