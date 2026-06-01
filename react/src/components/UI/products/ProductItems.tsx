@@ -1,67 +1,24 @@
-import { useEffect, useState } from "react";
-import greekSalad from "../../../assets/greeksalad.png";
-import { apiService } from "../../../shared/services/genericService";
-import { decreaseQty, increaseQty } from "../../../store/cartSlice";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../../../store/store";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { selectProductsWithCart } from "../../../store/selectors/combinedSelectors";
+import { decreaseQty, increaseQty } from "../../../store/slices/cartSlice";
+import { fetchProducts } from "../../../store/slices/productSlice";
 
-type IProduct = {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  rating: number;
-  category: string;
-  image: string;
-  qty: number;
-};
 
 function ProductItems() {
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
+  const products = useAppSelector(selectProductsWithCart);
+
 
   useEffect(() => {
-    fetchProduct();
+    dispatch(fetchProducts())
   }, []);
-
-  const fetchProduct = async () => {
-    try {
-      const response = await apiService.get<IProduct[]>("product");
-      const res = response.map((item) => {
-        return {
-          ...item,
-          image: greekSalad,
-          qty: 0,
-        };
-      });
-      setProducts(res);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
-
-  const onQtyHandler = (id: string, type: "inc" | "dec" = "inc") => {
-    setProducts((prev) =>
-      prev.map((product) =>
-        product.id === id
-          ? {
-            ...product,
-            qty:
-              type === "inc" ? product.qty + 1 : Math.max(product.qty - 1, 0),
-          }
-          : product,
-      ),
-    );
-    if (type == 'inc') {
-      dispatch(increaseQty({ _id: id, qty: 0 }))
-    } else dispatch(decreaseQty({ _id: id, qty: 0 }))
-  };
 
   return (
     <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {products.map((product) => (
         <li
-          key={product.id}
+          key={product._id}
           className="rounded-xl shadow-lg overflow-hidden bg-white transition duration-300 hover:shadow-2xl hover:-translate-y-1 cursor-pointer"
         >
           <div className="relative">
@@ -71,11 +28,11 @@ function ProductItems() {
               alt={product.name}
             />
             <div className="absolute right-4 bottom-4">
-              {product.qty > 0 ? (
+              {product.qty !== undefined && product.qty > 0 ? (
                 <div className="flex items-center gap-3 bg-white px-2 py-1 rounded-full shadow-md">
                   <button
                     aria-label="Decrease quantity"
-                    onClick={() => onQtyHandler(product.id, "dec")}
+                    onClick={() => dispatch(decreaseQty({ _id: product._id, qty: product.qty ?? 0 }))}
                     className="w-8 h-8 rounded-full bg-red-100 text-red-600 text-xl cursor-pointer flex items-center justify-center"
                   >
                     -
@@ -83,7 +40,7 @@ function ProductItems() {
                   <span className="font-medium">{product.qty}</span>
                   <button
                     aria-label="Increase quantity"
-                    onClick={() => onQtyHandler(product.id)}
+                    onClick={() => dispatch(increaseQty({ _id: product._id, qty: product.qty ?? 0 }))}
                     className="w-8 h-8 rounded-full bg-green-100 text-green-600 text-xl cursor-pointer flex items-center justify-center"
                   >
                     +
@@ -92,7 +49,7 @@ function ProductItems() {
               ) : (
                 <button
                   aria-label="Add product"
-                  onClick={() => onQtyHandler(product.id)}
+                  onClick={() => dispatch(increaseQty({ _id: product._id, qty: product.qty ?? 0 }))}
                   className="w-10 h-10 rounded-full bg-white shadow-md text-2xl cursor-pointer flex items-center justify-center"
                 >
                   +
@@ -118,8 +75,9 @@ function ProductItems() {
             </p>
           </div>
         </li>
-      ))}
-    </ul>
+      ))
+      }
+    </ul >
   );
 }
 

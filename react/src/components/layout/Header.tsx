@@ -2,15 +2,15 @@ import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from "@heroicons/reac
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useAppSelector } from "../../store/hooks";
+import { selectCartItems } from "../../store/selectors/cartSelectors";
 import DialogModel from "../UI/DialogModel";
 import Login from "./Login";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../store/store";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
-  const cartItems = useSelector((state: RootState) => state.cart.items)
+  const cartItems = useAppSelector(selectCartItems)
   const navs = [
     { id: 1, name: "home", path: "/" },
     { id: 2, name: "menu", path: "/menu" },
