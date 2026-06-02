@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import greekSalad from "../../assets/greeksalad.png";
 import { apiService } from "../../shared/services/genericService";
+import type { RootState } from "../store";
 
 export type ProductType = {
     _id: string;
@@ -10,13 +11,14 @@ export type ProductType = {
     rating: number;
     category: string;
     image: string;
-    qty?:number;
+    qty?: number;
 }
 
 type ProductState = {
     products: ProductType[];
     loading: boolean,
     error: string | null,
+    fetched: boolean;
 }
 
 export const fetchProducts = createAsyncThunk<ProductType[], void, { rejectValue: string }>(
@@ -28,9 +30,14 @@ export const fetchProducts = createAsyncThunk<ProductType[], void, { rejectValue
             const err = error as Error;
             return thunkAPI.rejectWithValue(err.message)
         }
-    })
+    }, {
+    condition: (_, { getState }) => {
+        const state = getState() as RootState;
+        return !state.products.fetched;
+    }
+})
 
-const initialState: ProductState = { products: [], loading: false, error: null }
+const initialState: ProductState = { products: [], loading: false, error: null, fetched: false }
 
 export const productSlice = createSlice({
     name: "product",
@@ -41,13 +48,16 @@ export const productSlice = createSlice({
             .addCase(fetchProducts.pending, (state) => {
                 state.loading = true;
                 state.error = null;
+                state.fetched = false;
             })
             .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<ProductType[]>) => {
                 state.loading = false;
                 state.products = action.payload
+                state.fetched = true;
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.loading = false;
+                state.fetched = false;
                 state.products = [];
                 state.error = action.payload ?? action.error.message ?? "Something went wrong";
             })

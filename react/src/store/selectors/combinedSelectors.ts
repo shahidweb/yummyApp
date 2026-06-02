@@ -15,3 +15,7 @@ export const selectProductsWithCart = createSelector(
             )?.qty ?? 0,
     }))
 )
+
+export const selectCartSubtotal = createSelector([selectProductsWithCart], (products) =>
+    products.reduce((total, item) => (total + (item.price * item.qty)), 0)
+)
