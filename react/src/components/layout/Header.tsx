@@ -1,11 +1,12 @@
 import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useAppSelector } from "../../store/hooks";
 import { selectCartItems } from "../../store/selectors/cartSelectors";
 import DialogModel from "../UI/DialogModel";
 import Login from "./Login";
+import { ROUTES } from "../../router/routePaths";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,12 +50,14 @@ function Header() {
           <button aria-label="Search">
             <MagnifyingGlassIcon className="w-6 h-6 hover:text-orange-500 cursor-pointer" />
           </button>
-          <button aria-label="Cart">
-            <ShoppingCartIcon className="w-6 h-6 hover:text-orange-500 cursor-pointer" />
-            {cartItems.length >= 1 && <>
-              <span className="text-red-800">*</span>
-            </>}
-          </button>
+          <Link to={ROUTES.CART} aria-label="Cart">
+            <div className="flex">
+              <ShoppingCartIcon className="w-6 h-6 hover:text-orange-500 cursor-pointer" />
+              {cartItems.length >= 1 && <>
+                <span className="text-red-800">*</span>
+              </>}
+            </div>
+          </Link>
           {!user ? <button
             onClick={() => setIsOpen(true)}
             aria-label="Search"
