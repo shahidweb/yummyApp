@@ -1,0 +1,75 @@
+<div>
+    <div id="top-filter">
+        <h1 class="font-bold text-gray-900 text-3xl mt-5">Explore or menu</h1>
+        <p class="text-gray-900 lg:w-3/5 mt-3">
+            Choose from a diverse menu featuring a delectable array of dishes. Our
+            mission is to satisfy your cravings and elavate your dining experience,
+            one delicious meal at a time
+        </p>
+        <ul class="flex items-center gap-6 mt-5 overflow-x-auto scrollbar-hide">
+            @for ( item of filters; track item.id ) {
+            <li key={item.id} class="text-center cursor-pointer"
+                (click)="selectedId = selectedId !== item.id ? item.id: 0">
+                <img class="w-20 h-20 md:w-full md:h-full object-cover mb-3 rounded-full hover:border-orange-600
+                hover:border-3" [ngClass]="selectedId===item.id ? 'border-3 border-orange-600' : '' " src={{item.img}}
+                    alt={{item.name}} width="100px" />
+                <span class="text-gray-600">{{item.name}}</span>
+                <!-- ${} -->
+            </li>
+            }
+        </ul>
+    </div>
+    <hr class="my-5 text-gray-300 border" />
+    <h1 class="text-2xl font-bold mb-5">Top dishes near you</h1>
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        @for (product of products; track product._id) {
+        <li
+            class="rounded-xl shadow-lg overflow-hidden bg-white transition duration-300 hover:shadow-2xl hover:-translate-y-1 cursor-pointer">
+            <div class="relative">
+                <img class="w-full h-60 object-cover" src={{product.image}} alt={{product.name}} />
+                <div class="absolute right-4 bottom-4">
+                    @if (product.qty !== undefined && product.qty > 0) {
+                    <div class="flex items-center gap-3 bg-white px-2 py-1 rounded-full shadow-md">
+                        <button aria-label="Decrease quantity"
+                            (click)="decreaseQty({ _id: product._id, qty: product.qty || 0 })"
+                            class="w-8 h-8 rounded-full bg-red-100 text-red-600 text-xl cursor-pointer flex items-center justify-center">
+                            -
+                        </button>
+                        <span class="font-medium">{{product.qty}}</span>
+                        <button aria-label="Increase quantity"
+                            (click)="increaseQty({ _id: product._id, qty: product.qty || 0 })" class=" w-8 h-8 rounded-full bg-green-100 text-green-600 text-xl cursor-pointer flex
+                            items-center justify-center">
+                            +
+                        </button>
+                    </div>
+                    }
+                    @else {
+                    <button aria-label="Add product" (click)="increaseQty({ _id: product._id, qty: product.qty ?? 0 })"
+                        class=" w-10 h-10 rounded-full bg-white shadow-md text-2xl cursor-pointer flex items-center
+                        justify-center">
+                        +
+                    </button>
+                    }
+                </div>
+            </div>
+            <div class="p-5">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-xl font-semibold">{{product.name}}</h1>
+                    <div class="text-xl">
+                        <span class="text-orange-600">
+                            {{"*".repeat(product.rating)}}
+                        </span>
+                        <span>{{"*".repeat(5 - product.rating)}}</span>
+                    </div>
+                </div>
+                <p class="text-gray-500 mt-3 leading-6 text-sm">
+                    {{product.description}}
+                </p>
+                <p class="text-orange-600 text-2xl font-semibold mt-4">
+                    ${{product.price}}
+                </p>
+            </div>
+        </li>
+        }
+    </ul>
+</div>
