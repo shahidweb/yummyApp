@@ -8,12 +8,23 @@ import productRoutes from './routes/product.ts'
 
 
 const app = express();
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
+
+const allowedOrigins = [
+    "http://localhost:4200",
+    "http://localhost:5173",
+];
 
 app.use(cookieParser())
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin(origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
         credentials: true,
     })
 );
