@@ -1,0 +1,46 @@
+<div class="max-w-7xl mx-auto px-5 py-5">
+  <header class="flex items-center justify-between">
+
+    <h1 class="cursor-pointer text-3xl font-bold text-orange-600">
+      Yummy.
+    </h1>
+
+    <nav class="hidden md:block">
+      <ul class="flex items-center gap-6">
+        @for (nav of navs; track nav.path) {
+        <li>
+          <a [routerLink]="nav.path" [routerLinkActiveOptions]="{exact:true}"
+            [routerLinkActive]="'text-orange-600 hover:underline font-bold'">
+            {{ nav.name }}
+          </a>
+        </li>
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-6">
+      <button aria-label="Search">
+        Search
+      </button>
+
+      <a routerLink="/cart" [routerLinkActive]="'font-bold text-orange-600 hover:underline'" aria-label="Cart">
+        <div class="flex items-center gap-1">
+          Cart
+
+          @if (cartItems.length > 0) {
+          <span class="text-red-600">*</span>
+          }
+        </div>
+      </a>
+
+      @if (!user) {
+      <button class="rounded-full border px-4 py-1 transition hover:bg-orange-600 hover:text-white cursor-pointer">
+        Sign In
+      </button>
+      } @else {
+      <span>User</span>
+      }
+    </div>
+
+  </header>
+</div>
