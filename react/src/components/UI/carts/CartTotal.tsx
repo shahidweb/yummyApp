@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { deliveryFee, formatCurrency } from '../../shared/utils/cartFn';
-import { selectCartSubtotal } from '../../store/selectors/combinedSelectors';
+import { deliveryFee, formatCurrency } from '../../../shared/utils/cartFn';
+import { selectCartSubtotal } from '../../../store/selectors/combinedSelectors';
 
 function CartTotal() {
     const subTotal = useSelector(selectCartSubtotal);
