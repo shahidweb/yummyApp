@@ -101,7 +101,7 @@ function DeliverForm() {
                     </div>
                     <button
                         className="mt-2 block bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition cursor-pointer">
-                        <Link to={ROUTES.ORDER}> Proceed To Payment </Link>
+                        <Link to={ROUTES.MYORDER}> Proceed To Payment </Link>
                     </button>
                 </form>
             </div>

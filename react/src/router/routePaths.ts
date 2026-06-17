@@ -1,5 +1,6 @@
 export const ROUTES = {
   HOME: "/",
   CART: "/cart",
-  ORDER:"/order"
+  ORDER:"/order",
+  MYORDER:"/myorder"
 } as const;
