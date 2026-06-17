@@ -16,7 +16,7 @@ function Header() {
     { id: 1, name: "home", path: "/" },
     { id: 2, name: "menu", path: "/menu" },
     { id: 3, name: "mobile app", path: "/app" },
-    { id: 4, name: "contact us", path: "/contact-us" },
+    { id: 4, name: "contact us", path: "/contact" },
   ];
 
   return (
