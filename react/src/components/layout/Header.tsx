@@ -2,21 +2,24 @@ import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from "@heroicons/reac
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { ROUTES } from "../../router/routePaths";
 import { useAppSelector } from "../../store/hooks";
 import { selectCartItems } from "../../store/selectors/cartSelectors";
 import DialogModel from "../UI/DialogModel";
+import UserNavs from "../UI/UserNavs";
 import Login from "./Login";
-import { ROUTES } from "../../router/routePaths";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
   const cartItems = useAppSelector(selectCartItems)
+  const [showMenu, setShowMenu] = useState(false);
+
   const navs = [
     { id: 1, name: "home", path: "/" },
     { id: 2, name: "menu", path: "/menu" },
     { id: 3, name: "mobile app", path: "/app" },
-    { id: 4, name: "contact us", path: "/contact-us" },
+    { id: 4, name: "contact us", path: "/contact" },
   ];
 
   return (
@@ -65,7 +68,14 @@ function Header() {
           >
             sign in
           </button> :
-            <UserIcon className="w-6 h-6 text-gray-700 cursor-pointer" />
+            <div className="relative group">
+              <UserIcon className="w-6 h-6 text-gray-700 cursor-pointer" onClick={() => setShowMenu((prev) => !prev)} />
+              {showMenu &&
+                <div className="absolute right-0 top-8 z-50">
+                  <UserNavs onHide={() => setShowMenu((prev) => !prev)} />
+                </div>
+              }
+            </div>
           }
         </div>
       </header>

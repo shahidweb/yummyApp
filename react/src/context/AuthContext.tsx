@@ -6,6 +6,8 @@ import React, {
   useState
 } from "react";
 import { apiService } from "../shared/services/genericService";
+import { notify } from "../shared/utils/toast";
+import { successMessages } from "../shared/utils/toastMessage";
 
 export const ROLES = {
   ADMIN: "admin",
@@ -57,10 +59,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     try {
-      // await apiService.post('/logout', '');
+      await apiService.post('/logout', '');
       setUser(null);
+      notify.success(successMessages.LOGOUT)
     } catch (error) {
-      console.error("Logout failed", error);
+      notify.error("Logout failed")
     }
   }
 

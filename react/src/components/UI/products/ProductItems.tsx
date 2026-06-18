@@ -1,18 +1,33 @@
 import { useEffect } from "react";
+import { useAuth } from "../../../context/AuthContext";
+import { notify } from "../../../shared/utils/toast";
+import { errorMessages } from "../../../shared/utils/toastMessage";
+import { scrollToTop } from "../../../shared/utils/windowFn";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { selectProductsWithCart } from "../../../store/selectors/combinedSelectors";
 import { decreaseQty, increaseQty } from "../../../store/slices/cartSlice";
-import { fetchProducts } from "../../../store/slices/productSlice";
+import { fetchProducts, type ProductType } from "../../../store/slices/productSlice";
 
 
 function ProductItems() {
   const dispatch = useAppDispatch();
   const products = useAppSelector(selectProductsWithCart);
+  const { isAuthenticated } = useAuth()
 
 
   useEffect(() => {
     dispatch(fetchProducts())
   }, []);
+
+  const handleQuantityChange = (product: ProductType, isIncrease = false) => {
+    if (!isAuthenticated) {
+      scrollToTop();
+      notify.error(errorMessages.isAuthFailed);
+      return;
+    }
+    const payload = { _id: product._id, qty: product.qty ?? 0 }
+    dispatch(isIncrease ? increaseQty(payload) : decreaseQty(payload))
+  }
 
   return (
     <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -32,7 +47,7 @@ function ProductItems() {
                 <div className="flex items-center gap-3 bg-white px-2 py-1 rounded-full shadow-md">
                   <button
                     aria-label="Decrease quantity"
-                    onClick={() => dispatch(decreaseQty({ _id: product._id, qty: product.qty ?? 0 }))}
+                    onClick={() => handleQuantityChange(product)}
                     className="w-8 h-8 rounded-full bg-red-100 text-red-600 text-xl cursor-pointer flex items-center justify-center"
                   >
                     -
@@ -40,7 +55,7 @@ function ProductItems() {
                   <span className="font-medium">{product.qty}</span>
                   <button
                     aria-label="Increase quantity"
-                    onClick={() => dispatch(increaseQty({ _id: product._id, qty: product.qty ?? 0 }))}
+                    onClick={() => handleQuantityChange(product, true)}
                     className="w-8 h-8 rounded-full bg-green-100 text-green-600 text-xl cursor-pointer flex items-center justify-center"
                   >
                     +
@@ -49,7 +64,7 @@ function ProductItems() {
               ) : (
                 <button
                   aria-label="Add product"
-                  onClick={() => dispatch(increaseQty({ _id: product._id, qty: product.qty ?? 0 }))}
+                  onClick={() => handleQuantityChange(product, true)}
                   className="w-10 h-10 rounded-full bg-white shadow-md text-2xl cursor-pointer flex items-center justify-center"
                 >
                   +

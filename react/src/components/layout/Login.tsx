@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { apiService, type APIResponse } from "../../shared/services/genericService";
 import { useAuth } from "../../context/AuthContext";
+import { apiService, type APIResponse } from "../../shared/services/genericService";
+import { notify } from "../../shared/utils/toast";
+import { successMessages } from "../../shared/utils/toastMessage";
 
 type formInput = {
   name?: string;
@@ -24,11 +26,12 @@ function Login({ onClose }: any) {
       const response = await apiService.post<APIResponse<null>, formInput>(`${isLogin ? "login" : "register"}`, data);
       if (response && response.success) {
         await fetchUser()
+        notify.success(successMessages.LOGIN)
       }
       onClose();
     } catch (error) {
       const err = error as Error;
-      alert(err.message);
+      notify.error(err.message)
       onClose();
     }
   };
