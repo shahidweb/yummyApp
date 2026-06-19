@@ -1,13 +1,14 @@
 import axios, { AxiosError } from "axios";
+import { DEV_URL } from "./APIURL";
 
-export type APIResponse<T> = {
+export type APIResponse<T = null> = {
     success: boolean;
     message: string;
-    data: T
+    data?: T
 }
 
 const api = axios.create({
-    baseURL: 'http://localhost:5000/api/v1/',
+    baseURL: DEV_URL,
     withCredentials: true,
 })
 
