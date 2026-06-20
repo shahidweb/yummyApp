@@ -14,7 +14,7 @@ export const register = async (req: Request, res: Response) => {
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         await User.create({ name, email, password: hashedPassword });
-        return success(res, "Registered Succeed", 201)
+        return success(res, "Registered Succeed", null, 201)
 
     } catch (error: any) {
         return fail(res, (error.message || "Internal server error"));

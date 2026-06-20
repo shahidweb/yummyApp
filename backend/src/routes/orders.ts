@@ -4,7 +4,7 @@ import tokenValidate from "../middlerware/tokenValidate.ts";
 
 const router = express.Router();
 
-router.post('/create', tokenValidate, createOrder);
-router.get('/my', tokenValidate, getMyOrder);
+router.post('/place-order', tokenValidate, createOrder);
+router.get('/my-orders', tokenValidate, getMyOrder);
 
 export default router;

@@ -41,7 +41,7 @@ export const createOrder = async (req: Request, res: Response) => {
             orderedBy: user.id,
             deliveryAddress,
         });
-        return success(res, "Order created successfully", 201)
+        return success(res, "Order created successfully", null, 201)
     } catch (error: any) {
         return fail(res, (error.message || "Internal server error"));
     }

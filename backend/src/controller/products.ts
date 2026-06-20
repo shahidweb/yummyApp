@@ -22,7 +22,7 @@ export const createProduct = async (req: Request, res: Response) => {
         await Product.create({
             name, description, price, category, createdBy: userId
         })
-        return success(res, "Product created successfully!", 201)
+        return success(res, "Product created successfully!", null, 201)
     } catch (error: any) {
         return fail(res, (error.message || "Internal server error"));
     }
