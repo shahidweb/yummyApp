@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import greekSalad from "../../assets/greeksalad.png";
-import { apiService } from "../../shared/services/genericService";
+import { apiService, type APIResponse } from "../../shared/services/genericService";
 import type { RootState } from "../store";
+import { ENDPOINT } from "../../shared/services/APIURL";
 
 export type ProductType = {
     _id: string;
@@ -24,8 +25,11 @@ type ProductState = {
 export const fetchProducts = createAsyncThunk<ProductType[], void, { rejectValue: string }>(
     "products/fetchProducts", async (_, thunkAPI) => {
         try {
-            const response = await apiService.get<ProductType[]>("product");
-            return response.map((item) => ({ ...item, image: greekSalad }));
+            const response = await apiService.get<APIResponse<ProductType[]>>(ENDPOINT.GET_ALL_PRODUCTS);
+            if (response.success && response.data) {
+                return response.data.map((item) => ({ ...item, image: greekSalad }));
+            }
+            return [];
         } catch (error) {
             const err = error as Error;
             return thunkAPI.rejectWithValue(err.message)

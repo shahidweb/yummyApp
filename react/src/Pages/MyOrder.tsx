@@ -4,6 +4,7 @@ import { apiService, type APIResponse } from "../shared/services/genericService"
 import { formatCurrency } from "../shared/utils/cartFn";
 import { ENDPOINT } from "../shared/services/APIURL";
 import { notify } from "../shared/utils/toast";
+import NoFound from "../components/UI/NoFound";
 
 type IItems = {
     name: string;
@@ -31,11 +32,15 @@ function MyOrder() {
             if (response.success && Array.isArray(response.data))
                 setOrders(response.data);
         } catch (error) {
+            setOrders([])
             const err = error as Error;
             notify.error(err.message)
         }
     }
 
+    if (orders.length == 0) {
+        return <NoFound title="Your Order history is empty" description="Looks like you haven't order anything yet." />
+    }
 
     return (
         <div className="max-w-7xl mx-auto py-10 px-5">
