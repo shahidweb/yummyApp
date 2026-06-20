@@ -5,9 +5,10 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { apiService } from "../shared/services/genericService";
+import { ENDPOINT } from "../shared/services/APIURL";
+import { apiService, type APIResponse } from "../shared/services/genericService";
 import { notify } from "../shared/utils/toast";
-import { successMessages } from "../shared/utils/toastMessage";
+import { errorMessages, successMessages } from "../shared/utils/toastMessage";
 
 export const ROLES = {
   ADMIN: "admin",
@@ -42,11 +43,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchUser = async () => {
     try {
       setIsLoading(true);
-      const response = await apiService.get<any>("/me");
-      if (response && response?.user) {
-        setUser(response.user);
+      const response = await apiService.get<APIResponse>(ENDPOINT.ME);
+      if (response && response?.data) {
+        setUser(response.data);
       }
-    } catch (error) {
+    } catch {
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -59,11 +60,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     try {
-      await apiService.post('/logout', '');
+      await apiService.post(ENDPOINT.LOGOUT, '');
       setUser(null);
       notify.success(successMessages.LOGOUT)
     } catch (error) {
-      notify.error("Logout failed")
+      notify.error(errorMessages.loginFailed)
     }
   }
 

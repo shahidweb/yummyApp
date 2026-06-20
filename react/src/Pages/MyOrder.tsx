@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react"
-import { formatCurrency } from "../shared/utils/cartFn";
 import { ArchiveBoxIcon } from "@heroicons/react/16/solid";
+import { useEffect, useState } from "react";
+import { apiService, type APIResponse } from "../shared/services/genericService";
+import { formatCurrency } from "../shared/utils/cartFn";
+import { ENDPOINT } from "../shared/services/APIURL";
+import { notify } from "../shared/utils/toast";
+import NoFound from "../components/UI/NoFound";
 
 type IItems = {
     name: string;
@@ -19,30 +23,24 @@ function MyOrder() {
     const [orders, setOrders] = useState<myOrderType[]>([])
 
     useEffect(() => {
-        let data = [
-            {
-                "_id": "ORD-001",
-                "status": "Food Processing",
-                "items": [
-                    { "name": "Greek salad", "quantity": 2 },
-                    { "name": "Peri Peri Rolls", "quantity": 3 }
-                ],
-                "total_price": 65.00,
-                "currency": "USD",
-            },
-            {
-                "_id": "ORD-002",
-                "status": "Delivered",
-                "items": [
-                    { "name": "Margherita Pizza", "quantity": 1 }
-                ],
-                "total_price": 15.50,
-                "currency": "USD",
-            }
-        ]
-        setOrders(data)
+        fetchOrders();
     }, [])
 
+    const fetchOrders = async () => {
+        try {
+            const response = await apiService.get<APIResponse<myOrderType[]>>(ENDPOINT.ORDER_HISTORY);
+            if (response.success && Array.isArray(response.data))
+                setOrders(response.data);
+        } catch (error) {
+            setOrders([])
+            const err = error as Error;
+            notify.error(err.message)
+        }
+    }
+
+    if (orders.length == 0) {
+        return <NoFound title="Your Order history is empty" description="Looks like you haven't order anything yet." />
+    }
 
     return (
         <div className="max-w-7xl mx-auto py-10 px-5">

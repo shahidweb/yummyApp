@@ -1,8 +1,6 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { ROUTES } from "../../router/routePaths";
 
-type formInput = {
+export type IDeliveryAddress = {
     fname: string;
     lname: string;
     email: string;
@@ -14,18 +12,14 @@ type formInput = {
     phone: string;
 }
 
-function DeliverForm() {
-    const { register, handleSubmit, formState: { errors } } = useForm<formInput>();
-
-    const onSubmit = (data: formInput) => {
-        console.log(data)
-    }
+function DeliverForm({ onSubmitOrder }: { onSubmitOrder: (add: IDeliveryAddress) => void }) {
+    const { register, handleSubmit, formState: { errors } } = useForm<IDeliveryAddress>();
 
     return (
         <div className="w-full lg:w-1/2">
             <h1 className="text-2xl font-bold mb-2">Delivery Information</h1>
             <div className="space-y-4">
-                <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 max-w-2xl max-w-2x1 mx-auto p-4 gap-5">
+                <form onSubmit={handleSubmit((data) => onSubmitOrder(data))} className="grid grid-cols-1 md:grid-cols-2 max-w-2xl max-w-2x1 mx-auto p-4 gap-5">
                     <div>
                         <input
                             type="text"
@@ -101,7 +95,7 @@ function DeliverForm() {
                     </div>
                     <button
                         className="mt-2 block bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition cursor-pointer">
-                        <Link to={ROUTES.MYORDER}> Proceed To Payment </Link>
+                        Proceed To Payment
                     </button>
                 </form>
             </div>

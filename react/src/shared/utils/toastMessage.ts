@@ -4,5 +4,6 @@ export const successMessages = {
 }
 
 export const errorMessages = {
-    isAuthFailed: "Please login first"
+    isAuthFailed: "Please login first",
+    loginFailed: "Logout failed"
 }

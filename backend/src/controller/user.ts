@@ -1,8 +1,8 @@
-import type { Request, Response } from 'express';
-import { User } from '../model/user.ts';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken'
-
+import type { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { User } from '../model/user.ts';
+import { fail, success } from '../utils/apiResponse.ts';
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -10,19 +10,14 @@ export const register = async (req: Request, res: Response) => {
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(409).send('User already registered')
+            return fail(res, "User already registered", 409);
         }
-
         const hashedPassword = await bcrypt.hash(password, 10);
         await User.create({ name, email, password: hashedPassword });
+        return success(res, "Registered Succeed", null, 201)
 
-        res.status(201).send('Registerd Successed')
-
-    } catch (error) {
-        return res.status(500).json({
-            message: "Internal server error",
-            error
-        });
+    } catch (error: any) {
+        return fail(res, (error.message || "Internal server error"));
     }
 }
 
@@ -31,20 +26,17 @@ export const login = async (req: Request, res: Response) => {
         const { email, password } = req.body;
 
         if (!email || !password)
-            return res.status(400).send({
-                message: "All fields are required"
-            })
+            return fail(res, "All fields are required", 400);
 
         const existingUser = await User.findOne({ email });
-        if (!existingUser) return res.status(401).json({ message: 'Invalid credential' });
+        if (!existingUser) return fail(res, "Invalid credential", 401);
 
         const matchPassword = await bcrypt.compare(password, existingUser.password);
-        if (!matchPassword) return res.status(400).json({ message: 'Invalid credential' });
+        if (!matchPassword) return fail(res, "Invalid credential", 401);
 
         if (!process.env.SECRET_KEY) {
             throw new Error("SECRET_KEY missing");
         }
-
         const token = jwt.sign({ id: existingUser._id, email: existingUser.email }, process.env.SECRET_KEY, { expiresIn: '1h' })
 
         res.cookie('token', token, {
@@ -53,14 +45,9 @@ export const login = async (req: Request, res: Response) => {
             sameSite: 'lax',      // Allows cross-origin requests from 5173 to 5000
             maxAge: 24 * 60 * 60 * 1000 // 1 day expiration
         });
-        return res.status(200).json({ success: true, message: "login successfully" })
-
-    }
-    catch (error) {
-        return res.status(500).json({
-            message: "Internal server error",
-            error
-        });
+        return success(res, "login successfully")
+    } catch (error: any) {
+        return fail(res, (error.message || "Internal server error"));
     }
 }
 
@@ -70,18 +57,23 @@ export const me = async (req: Request, res: Response) => {
         const users = await User.find({ _id: id }).select('_id name email role');
         if (!users) {
             res.clearCookie('token');
-            return res.status(500).json({
-                success: false,
-            })
+            return fail(res, "Authentication token missing", 500);
         }
-        return res.status(200).json({
-            success: true,
-            user: users[0],
-        })
-    } catch (error) {
-        return res.status(500).json({
-            message: "Internal server error",
-            error
+        return success(res, "Login Profile", users[0])
+    } catch (error: any) {
+        return fail(res, (error.message || "Internal server error"));
+    }
+}
+
+export const logout = async (req: Request, res: Response) => {
+    try {
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: false,
+            sameSite: "strict"
         });
+        return success(res, "Logout successfull",)
+    } catch (error: any) {
+        return fail(res, (error.message || "Internal server error"));
     }
 }
