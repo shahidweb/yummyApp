@@ -34,7 +34,8 @@
       </a>
 
       @if (!user) {
-      <button class="rounded-full border px-4 py-1 transition hover:bg-orange-600 hover:text-white cursor-pointer">
+      <button (click)="toggleLogin()"
+        class="rounded-full border px-4 py-1 transition hover:bg-orange-600 hover:text-white cursor-pointer">
         Sign In
       </button>
       } @else {
@@ -43,4 +44,7 @@
     </div>
 
   </header>
+  <app-modal [title]="isLoginOpen() ? 'Login' : 'Sign up'" [isOpen]="isLoginOpen()" (close)="toggleLogin()">
+    <app-login />
+  </app-modal>
 </div>
