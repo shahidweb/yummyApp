@@ -7,11 +7,5 @@ import { Component, Input, input, output } from '@angular/core';
   styleUrl: './modal.scss',
 })
 export class Modal {
-  @Input()title =  ''
   isOpen = input(false);
-  close = output<void>();
-
-  onClose() {
-    this.close.emit();
-  }
 }

@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Login } from "../login/login";
 import { Modal } from "../../../shared/components/modal/modal";
+import { AuthStore } from '../../../core/auth/auth.store';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,9 @@ import { Modal } from "../../../shared/components/modal/modal";
   styleUrl: './header.scss',
 })
 export class Header {
-  isLoginOpen = signal(false);
+  authStore = inject(AuthStore)
+
+  isModalOpen = signal(false);
   cartItems = []
   user = ''
   navs = [
@@ -20,8 +23,8 @@ export class Header {
     { id: 4, name: "contact us", path: "/contact-us" },
   ];
 
-  toggleLogin() {
-    this.isLoginOpen.set(!this.isLoginOpen())
+  switchLoginModal() {
+    this.isModalOpen.set(!this.isModalOpen())
   }
 
 

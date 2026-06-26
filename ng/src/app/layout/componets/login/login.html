@@ -1,4 +1,8 @@
 <div class="modal">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold">{{isLogin ? 'Login' : 'Sign up'}}</h1>
+        <span class="text-xl cursor-pointer" (click)="closeModel.emit()">✕</span>
+    </div>
     <form #loginForm="ngForm" class="space-y-4" (ngSubmit)="onSubmit(loginForm)">
         @if(!isLogin) {
         <input
