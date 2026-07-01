@@ -11,11 +11,12 @@ import { AuthStore } from '../../../core/auth/auth.store';
   styleUrl: './header.scss',
 })
 export class Header {
-  authStore = inject(AuthStore)
-
+  isShowMenu = false;
   isModalOpen = signal(false);
-  cartItems = []
+  cartItems = [];
   user = ''
+
+  authStore = inject(AuthStore);
   navs = [
     { id: 1, name: "home", path: "/" },
     { id: 2, name: "menu", path: "/menu" },
@@ -25,6 +26,10 @@ export class Header {
 
   switchLoginModal() {
     this.isModalOpen.set(!this.isModalOpen())
+  }
+
+  logout() {
+    this.authStore.clear()
   }
 
 

@@ -39,7 +39,24 @@
         Sign In
       </button>
       } @else {
-      <span>User</span>
+      <div class="relative group">
+        <span class="w-6 h-6 text-gray-700 cursor-pointer" (click)="isShowMenu = !isShowMenu">User</span>
+        @if(isShowMenu){
+        <div class="absolute right-0 top-8 z-50">
+          <ul class="min-w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-2 text-end">
+            <li class="cursor-pointer" (click)="isShowMenu = !isShowMenu">
+              <a to="/profile" class="block px-4 py-2 hover:bg-orange-50">Profile</a>
+            </li>
+            <li class="cursor-pointer" (click)="isShowMenu = !isShowMenu">
+              <a to={ROUTES.MYORDER} class="block px-4 py-2 hover:bg-orange-50"> My Orders</a>
+            </li>
+            <li (click)="logout()" class="px-4 py-2 cursor-pointer hover:bg-orange-50">
+              Logout
+            </li>
+          </ul>
+        </div>
+        }
+      </div>
       }
     </div>
 
