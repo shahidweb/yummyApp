@@ -33,8 +33,9 @@
         </div>
       </a>
 
-      @if (!user) {
-      <button class="rounded-full border px-4 py-1 transition hover:bg-orange-600 hover:text-white cursor-pointer">
+      @if (!authStore.isAuthenticated()) {
+      <button (click)="switchLoginModal()"
+        class="rounded-full border px-4 py-1 transition hover:bg-orange-600 hover:text-white cursor-pointer">
         Sign In
       </button>
       } @else {
@@ -43,4 +44,7 @@
     </div>
 
   </header>
+  <app-modal [isOpen]="isModalOpen()">
+    <app-login (closeModel)="switchLoginModal()" />
+  </app-modal>
 </div>
