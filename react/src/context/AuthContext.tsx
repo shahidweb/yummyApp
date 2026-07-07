@@ -5,10 +5,12 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { ENDPOINT } from "../shared/services/APIURL";
-import { apiService, type APIResponse } from "../shared/services/genericService";
+import { ENDPOINT } from "../shared/constants/api_urls";
+import { apiService, type APIResponse } from "../services/genericService";
 import { notify } from "../shared/utils/toast";
 import { errorMessages, successMessages } from "../shared/utils/toastMessage";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../shared/constants/routePaths";
 
 export const ROLES = {
   ADMIN: "admin",
@@ -39,13 +41,16 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const navigate = useNavigate()
 
   const fetchUser = async () => {
     try {
       setIsLoading(true);
-      const response = await apiService.get<APIResponse>(ENDPOINT.ME);
+      const response = await apiService.get<APIResponse<IUser>>(ENDPOINT.ME);
       if (response && response?.data) {
         setUser(response.data);
+        if (response.data.role === ROLES.ADMIN)
+          navigate(ROUTES.ADMIN.DASHBOARD)
       }
     } catch {
       setUser(null);

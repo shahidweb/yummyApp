@@ -4,6 +4,7 @@ import { switchMap } from 'rxjs';
 import { ILoginForm } from '../../../core/auth/auth.model';
 import { AuthService } from '../../../core/auth/auth.service';
 import { AuthStore } from '../../../core/auth/auth.store';
+import { NotificationService } from '../../../shared/services/notificationService';
 
 @Component({
   selector: 'app-login',
@@ -21,8 +22,10 @@ export class Login {
     password: ""
   }
 
-  constructor(private authService: AuthService, private authStore: AuthStore) { }
-
+  constructor(
+    private authService: AuthService,
+    private authStore: AuthStore,
+    private notificationService: NotificationService) { }
 
   onSubmit(form: NgForm) {
     if (form.invalid) return;
@@ -32,12 +35,14 @@ export class Login {
     ).subscribe({
       next: (res) => {
         if (res.data) {
+          this.notificationService.success(res.message);
           this.authStore.setUser(res.data);
-          this.closeModel.emit()
+          this.closeModel.emit();
         }
       },
       error: (err) => {
-        console.error(err)
+        this.notificationService.error(err.message);
+        console.error('err', err);
       }
     })
   }

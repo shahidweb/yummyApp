@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import greekSalad from "../../assets/greeksalad.png";
-import { apiService, type APIResponse } from "../../shared/services/genericService";
+import { apiService, type APIResponse } from "../../services/genericService";
 import type { RootState } from "../store";
-import { ENDPOINT } from "../../shared/services/APIURL";
+import { ENDPOINT } from "../../shared/constants/api_urls";
 
 export type ProductType = {
     _id: string;
