@@ -1,12 +1,12 @@
 import { useState } from "react";
-import cake from "../../../assets/cake.png";
-import deserts from "../../../assets/deserts.png";
-import noodle from "../../../assets/noodles.png";
-import pasta from "../../../assets/pasta.png";
-import pureveg from "../../../assets/pureveg.png";
-import roll from "../../../assets/roll.png";
-import salad from "../../../assets/salad.png";
-import sandwich from "../../../assets/sandwich.png";
+import cake from "../../../../assets/cake.png";
+import deserts from "../../../../assets/deserts.png";
+import noodle from "../../../../assets/noodles.png";
+import pasta from "../../../../assets/pasta.png";
+import pureveg from "../../../../assets/pureveg.png";
+import roll from "../../../../assets/roll.png";
+import salad from "../../../../assets/salad.png";
+import sandwich from "../../../../assets/sandwich.png";
 
 function ProductFilter() {
   const [selectedItem, setSelectedItem] = useState(0);

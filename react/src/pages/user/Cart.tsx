@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import CartTable from "../components/UI/carts/CartTable";
-import CartTotal from "../components/UI/carts/CartTotal";
-import PromoCode from "../components/UI/carts/PromoCode";
-import NoFound from "../components/UI/NoFound";
-import { useAppDispatch } from "../store/hooks";
-import { selectProductsWithCart } from "../store/selectors/combinedSelectors";
-import { deleteItem } from "../store/slices/cartSlice";
+import { useAppDispatch } from "../../store/hooks";
+import { selectProductsWithCart } from "../../store/selectors/combinedSelectors";
+import { deleteItem } from "../../store/slices/cartSlice";
+import NoFound from "../../components/user/sections/NoFound";
+import CartTable from "../../components/user/sections/carts/CartTable";
+import CartTotal from "../../components/user/sections/carts/CartTotal";
+import PromoCode from "../../components/user/sections/carts/PromoCode";
 
 function Cart() {
     const cartItems = useSelector(selectProductsWithCart);

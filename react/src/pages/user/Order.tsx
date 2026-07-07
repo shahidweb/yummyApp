@@ -1,14 +1,14 @@
 import { Navigate, useNavigate } from 'react-router-dom'
-import CartTotal from '../components/UI/carts/CartTotal'
-import type { IDeliveryAddress } from '../components/UI/DeliverForm'
-import DeliverForm from '../components/UI/DeliverForm'
-import { ROUTES } from '../router/routePaths'
-import { ENDPOINT } from '../shared/services/APIURL'
-import { apiService, type APIResponse } from '../shared/services/genericService'
-import { notify } from '../shared/utils/toast'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectCartItems } from '../store/selectors/cartSelectors'
-import { clearCart } from '../store/slices/cartSlice'
+import { ROUTES } from '../../shared/constants/routePaths'
+import { ENDPOINT } from '../../shared/constants/api_urls'
+import { apiService, type APIResponse } from '../../services/genericService'
+import { notify } from '../../shared/utils/toast'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { selectCartItems } from '../../store/selectors/cartSelectors'
+import { clearCart } from '../../store/slices/cartSlice'
+import type { IDeliveryAddress } from '../../components/user/sections/DeliverForm'
+import CartTotal from '../../components/user/sections/carts/CartTotal'
+import DeliverForm from '../../components/user/sections/DeliverForm'
 
 function Order() {
     const cartItems = useAppSelector(selectCartItems);
@@ -31,7 +31,7 @@ function Order() {
                 (ENDPOINT.ORDER_CREATED, payload)
             if (res.success) {
                 notify.success(res.message)
-                navigate(ROUTES.MYORDER);
+                navigate(ROUTES.USER.MYORDER);
                 dispatch(clearCart())
             }
         } catch (error) {

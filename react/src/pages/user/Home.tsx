@@ -1,5 +1,5 @@
-import Banner from "../components/UI/Banner";
-import Products from "../components/UI/products/Products";
+import Banner from "../../components/user/sections/Banner";
+import Products from "../../components/user/sections/products/Products";
 
 function Home() {
   return (

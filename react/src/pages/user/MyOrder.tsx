@@ -1,10 +1,10 @@
 import { ArchiveBoxIcon } from "@heroicons/react/16/solid";
 import { useEffect, useState } from "react";
-import { apiService, type APIResponse } from "../shared/services/genericService";
-import { formatCurrency } from "../shared/utils/cartFn";
-import { ENDPOINT } from "../shared/services/APIURL";
-import { notify } from "../shared/utils/toast";
-import NoFound from "../components/UI/NoFound";
+import { apiService, type APIResponse } from "../../services/genericService";
+import { formatCurrency } from "../../shared/utils/cartFn";
+import { ENDPOINT } from "../../shared/constants/api_urls";
+import { notify } from "../../shared/utils/toast";
+import NoFound from "../../components/user/sections/NoFound";
 
 type IItems = {
     name: string;

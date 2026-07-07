@@ -1,6 +1,6 @@
 import React from "react"
-import { formatCurrency } from "../../../shared/utils/cartFn"
-import type { ProductType } from "../../../store/slices/productSlice";
+import { formatCurrency } from "../../../../shared/utils/cartFn";
+import type { ProductType } from "../../../../store/slices/productSlice";
 
 interface CartTableProps {
     activeCartItems: ProductType[];

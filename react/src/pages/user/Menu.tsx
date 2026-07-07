@@ -1,4 +1,4 @@
-import Products from '../components/UI/products/Products'
+import Products from "../../components/user/sections/products/Products"
 
 function Menu() {
   return (

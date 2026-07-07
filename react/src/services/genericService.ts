@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { DEV_URL } from "./APIURL";
+import { DEV_URL } from "../shared/constants/api_urls";
 
 export type APIResponse<T = null> = {
     success: boolean;

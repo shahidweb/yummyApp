@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../context/AuthContext";
-import { apiService, type APIResponse } from "../../shared/services/genericService";
-import { notify } from "../../shared/utils/toast";
-import { successMessages } from "../../shared/utils/toastMessage";
+import { useAuth } from "../context/AuthContext";
+import { apiService, type APIResponse } from "../services/genericService";
+import { notify } from "../shared/utils/toast";
+import { successMessages } from "../shared/utils/toastMessage";
 
 type formInput = {
   name?: string;

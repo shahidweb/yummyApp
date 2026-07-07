@@ -2,12 +2,12 @@ import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from "@heroicons/reac
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { ROUTES } from "../../router/routePaths";
+import { ROUTES } from "../../shared/constants/routePaths";
 import { useAppSelector } from "../../store/hooks";
 import { selectCartItems } from "../../store/selectors/cartSelectors";
-import DialogModel from "../UI/DialogModel";
-import UserNavs from "../UI/UserNavs";
-import Login from "./Login";
+import Login from "../../layouts/Login";
+import UserNavs from "./sections/UserNavs";
+import DialogModal from "./sections/DialogModal";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,9 +26,11 @@ function Header() {
     <div className="max-w-7xl mx-auto py-5 px-5">
       <header className="flex items-center justify-between">
         {/* logo */}
-        <h1 className="cursor-pointer text-3xl font-bold text-orange-600">
-          Yummy.
-        </h1>
+        <Link to={ROUTES.USER.HOME}>
+          <h1 className="cursor-pointer text-3xl font-bold text-orange-600">
+            Yummy.
+          </h1>
+        </Link>
         {/* navigations */}
         <nav className="hidden md:flex">
           <ul className="flex items-center gap-6">
@@ -53,7 +55,7 @@ function Header() {
           <button aria-label="Search">
             <MagnifyingGlassIcon className="w-6 h-6 hover:text-orange-500 cursor-pointer" />
           </button>
-          <Link to={ROUTES.CART} aria-label="Cart">
+          <Link to={ROUTES.USER.CART} aria-label="Cart">
             <div className="flex">
               <ShoppingCartIcon className="w-6 h-6 hover:text-orange-500 cursor-pointer" />
               {cartItems.length >= 1 && <>
@@ -79,9 +81,9 @@ function Header() {
           }
         </div>
       </header>
-      <DialogModel isOpen={isOpen}>
+      <DialogModal isOpen={isOpen}>
         <Login onClose={() => setIsOpen(false)} />
-      </DialogModel>
+      </DialogModal>
     </div>
   );
 }

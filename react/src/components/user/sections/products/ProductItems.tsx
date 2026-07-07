@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { useAuth } from "../../../context/AuthContext";
-import { notify } from "../../../shared/utils/toast";
-import { errorMessages } from "../../../shared/utils/toastMessage";
-import { scrollToTop } from "../../../shared/utils/windowFn";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { selectProductsWithCart } from "../../../store/selectors/combinedSelectors";
-import { decreaseQty, increaseQty } from "../../../store/slices/cartSlice";
-import { fetchProducts, type ProductType } from "../../../store/slices/productSlice";
+import { selectProductsWithCart } from "../../../../store/selectors/combinedSelectors";
+import { useAuth } from "../../../../context/AuthContext";
+import { notify } from "../../../../shared/utils/toast";
+import { errorMessages } from "../../../../shared/utils/toastMessage";
+import { scrollToTop } from "../../../../shared/utils/windowFn";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { increaseQty, decreaseQty } from "../../../../store/slices/cartSlice";
+import { fetchProducts, type ProductType } from "../../../../store/slices/productSlice";
 
 
 function ProductItems() {

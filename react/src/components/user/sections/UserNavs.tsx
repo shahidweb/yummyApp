@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { ROUTES } from "../../router/routePaths";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
+import { ROUTES } from "../../../shared/constants/routePaths";
 
 function UserNavs({ onHide }: any) {
     const { logout } = useAuth();
@@ -10,7 +10,7 @@ function UserNavs({ onHide }: any) {
                 <Link to="/profile" className="block px-4 py-2 hover:bg-orange-50">Profile</Link>
             </li>
             <li onClick={onHide}>
-                <Link to={ROUTES.MYORDER} className="block px-4 py-2 hover:bg-orange-50">
+                <Link to={ROUTES.USER.MYORDER} className="block px-4 py-2 hover:bg-orange-50">
                     My Orders
                 </Link>
             </li>
