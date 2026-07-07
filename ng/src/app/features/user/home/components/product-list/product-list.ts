@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ProductType } from '../../../../../shared/utils/product.model';
 import { ProductServices } from '../../services/product.services';
+import { CartStore } from '../../../../../state/Cart/cart.store';
 
 @Component({
   selector: 'app-product-list',
@@ -10,17 +11,19 @@ import { ProductServices } from '../../services/product.services';
 export class ProductList {
   products: ProductType[] = []
 
-  constructor(private prodService: ProductServices) { }
+  constructor(private prodService: ProductServices, private cartStore: CartStore) { }
 
   ngOnInit() {
     this.prodService.getProduct().subscribe((res) => this.products = res.data)
   }
 
-  decreaseQty(props: any) {
-    console.log(props)
+  increaseQty({ _id }: any) {
+    this.cartStore.increase(_id)
   };
-  increaseQty(props: any) {
-    console.log(props)
+
+  decreaseQty({ _id }: any) {
+    this.cartStore.decrease(_id)
   };
+
 
 }

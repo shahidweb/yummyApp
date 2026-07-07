@@ -16,7 +16,9 @@ export class AuthStore {
     get currentUser(): IUser | null { return this._user() }
 
     setUser(user: IUser): void { this._user.set(user); }
+
     clear(): void { this._user.set(null) }
+    
     updateUser(user: Partial<IUser>): void {
         this._user.update(current => current ? { ...current, ...user } : null);
     }
