@@ -8,7 +8,7 @@ function TopBar() {
   const { logout } = useAuth();
   return (
     <div className="bg-gray-100">
-      <div className="max-w-7xl mx-auto py-2 px-2">
+      <div className="py-2 px-8">
         <div className="flex items-center justify-between">
           {/* logo */}
           <Link to={ROUTES.ADMIN.DASHBOARD}>

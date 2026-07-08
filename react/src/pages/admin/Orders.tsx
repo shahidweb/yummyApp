@@ -71,9 +71,10 @@ function Orders() {
                 <select onChange={(event) => onChangeStatus(event?.target.value)}
                   className="outline-0 border-0 bg-red-100 hover:bg-red-100 px-6 py-3 rounded text-gray-700 cursor-pointer transition">
                   <option className="cursor-pointer" selected>{ORDER_STATUS.PENDING}</option>
-                  <option className="cursor-pointer" value={ORDER_STATUS.FOOD_PROCESSING}>{ORDER_STATUS.FOOD_PROCESSING}</option>
+                  <option className="cursor-pointer" value={ORDER_STATUS.PREPARING}>{ORDER_STATUS.PREPARING}</option>
                   <option className="cursor-pointer" value={ORDER_STATUS.OUT_OF_DELIVERY}>{ORDER_STATUS.OUT_OF_DELIVERY}</option>
                   <option className="cursor-pointer" value={ORDER_STATUS.DELIVERED}>{ORDER_STATUS.DELIVERED}</option>
+                  <option className="cursor-pointer" value={ORDER_STATUS.CANCELLED}>{ORDER_STATUS.CANCELLED}</option>
                 </select>
               </div>
             </div>
