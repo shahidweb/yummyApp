@@ -8,6 +8,9 @@ export const ROUTES = {
     CONTACT: "/contact"
   },
   ADMIN: {
-    DASHBOARD: "/admin"
+    DASHBOARD: "/admin",
+    ADD_PRODUCT: '/admin/new-product',
+    VIEW_PRODUCT: '/admin/view-product',
+    ORDER: '/admin/orders'
   }
 } as const;

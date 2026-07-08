@@ -1,16 +1,10 @@
 import { Route, Routes } from 'react-router-dom'
+import { AdminLayout, UserLayout } from '../layouts'
+import { AddProduct, Dashboard, Orders, Products } from '../pages/admin'
+import { Cart, Contact, Home, Menu, MyOrder, Order } from '../pages/user'
 import { ROUTES } from '../shared/constants/routePaths'
-import ProtectedRoute from './ProtectedRoute'
-import UserLayout from '../layouts/UserLayout'
-import Home from '../pages/user/Home'
-import Menu from '../pages/user/Menu'
-import Contact from '../pages/user/Contact'
-import Cart from '../pages/user/Cart'
-import Order from '../pages/user/Order'
-import MyOrder from '../pages/user/MyOrder'
 import AdminRoute from './AdminRoute'
-import AdminLayout from '../layouts/AdminLayout'
-import Dashboard from '../pages/admin/Dashboard'
+import ProtectedRoute from './ProtectedRoute'
 
 function AppRoutes() {
     return (
@@ -32,7 +26,9 @@ function AppRoutes() {
 
             <Route path={ROUTES.ADMIN.DASHBOARD} element={<AdminRoute><AdminLayout /></AdminRoute>}>
                 <Route index element={<Dashboard />} />
-                {/* <Route path="products" element={<ProductList />} /> */}
+                <Route path={ROUTES.ADMIN.ADD_PRODUCT} element={<AddProduct />} />
+                <Route path={ROUTES.ADMIN.VIEW_PRODUCT} element={<Products />} />
+                <Route path={ROUTES.ADMIN.ORDER} element={<Orders />} />
             </Route>
 
         </Routes>
