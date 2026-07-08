@@ -1,16 +1,5 @@
 import { useForm } from "react-hook-form";
-
-export type IDeliveryAddress = {
-    fname: string;
-    lname: string;
-    email: string;
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-    phone: string;
-}
+import type { IDeliveryAddress } from "../../../shared/types/orders";
 
 function DeliverForm({ onSubmitOrder }: { onSubmitOrder: (add: IDeliveryAddress) => void }) {
     const { register, handleSubmit, formState: { errors } } = useForm<IDeliveryAddress>();

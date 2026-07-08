@@ -5,22 +5,12 @@ import { formatCurrency } from "../../shared/utils/cartFn";
 import { ENDPOINT } from "../../shared/constants/api_urls";
 import { notify } from "../../shared/utils/toast";
 import NoFound from "../../components/user/sections/NoFound";
+import type { TOrderType } from "../../shared/types/orders";
 
-type IItems = {
-    name: string;
-    quantity: number
-}
 
-type myOrderType = {
-    _id: string;
-    status: string;
-    items: IItems[];
-    total_price: number,
-    currency: string,
-}
 
 function MyOrder() {
-    const [orders, setOrders] = useState<myOrderType[]>([])
+    const [orders, setOrders] = useState<TOrderType[]>([])
 
     useEffect(() => {
         fetchOrders();
@@ -28,7 +18,7 @@ function MyOrder() {
 
     const fetchOrders = async () => {
         try {
-            const response = await apiService.get<APIResponse<myOrderType[]>>(ENDPOINT.ORDER_HISTORY);
+            const response = await apiService.get<APIResponse<TOrderType[]>>(ENDPOINT.ORDER_HISTORY);
             if (response.success && Array.isArray(response.data))
                 setOrders(response.data);
         } catch (error) {
