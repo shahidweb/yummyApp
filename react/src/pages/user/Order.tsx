@@ -6,9 +6,9 @@ import { notify } from '../../shared/utils/toast'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectCartItems } from '../../store/selectors/cartSelectors'
 import { clearCart } from '../../store/slices/cartSlice'
-import type { IDeliveryAddress } from '../../components/user/sections/DeliverForm'
 import CartTotal from '../../components/user/sections/carts/CartTotal'
 import DeliverForm from '../../components/user/sections/DeliverForm'
+import type { IDeliveryAddress } from '../../shared/types/orders'
 
 function Order() {
     const cartItems = useAppSelector(selectCartItems);

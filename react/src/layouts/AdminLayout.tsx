@@ -7,9 +7,8 @@ function AdminLayout() {
             <TopBar />
             <div className="flex">
                 <SideBar />
-                <main className="p-6">
+                <main className="w-full">
                     <Outlet />
-                    <h1>hi admin</h1>
                 </main>
             </div>
         </div>
