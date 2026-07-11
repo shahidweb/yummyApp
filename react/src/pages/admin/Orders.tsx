@@ -32,7 +32,7 @@ function Orders() {
 
 
   return (
-    <div className="max-w-6xl py-10 px-5">
+    <div className="max-w-7xl py-10 px-5">
       <div className="overflow-x-auto">
         <h1 className="text-2xl font-bold mb-5">Order Page</h1>
         <div className="space-y-4">
