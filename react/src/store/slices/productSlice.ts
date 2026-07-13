@@ -25,9 +25,9 @@ type ProductState = {
 export const fetchProducts = createAsyncThunk<ProductType[], void, { rejectValue: string }>(
     "products/fetchProducts", async (_, thunkAPI) => {
         try {
-            const response = await apiService.get<APIResponse<ProductType[]>>(ENDPOINT.GET_ALL_PRODUCTS);
+            const response = await apiService.get<APIResponse<ProductType[]>>(ENDPOINT.PRODUCTS);
             if (response.success && response.data) {
-                return response.data.map((item) => ({ ...item, image: greekSalad }));
+                return response.data.map((item) => ({ ...item, image: item.image ? item.image : greekSalad }));
             }
             return [];
         } catch (error) {

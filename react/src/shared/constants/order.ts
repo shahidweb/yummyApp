@@ -5,3 +5,6 @@ export const ORDER_STATUS = {
     DELIVERED: "Delivered",
     CANCELLED: "Cancelled",
 } as const;
+
+
+export const PRODUCT_CATEGORIES = ['Salad', "Rolls", "Deserts", "Sandwich", "Cake", "Pure Veg", "Pasta", "Noodles"]
