@@ -1,12 +1,13 @@
 import express from "express";
 import { createProduct, deleteProduct, getProducts, updateProduct } from "../controller/products.ts";
 import tokenValidate from "../middlerware/tokenValidate.ts";
+import isAdmin from "../middlerware/IsValidAdmin.ts";
 
 const router = express.Router();
 
 router.get('/', getProducts)
-router.post('/', tokenValidate, createProduct)
-router.put('/:id', tokenValidate, updateProduct)
-router.delete('/:id', tokenValidate, deleteProduct)
+router.post('/', tokenValidate, isAdmin, createProduct)
+router.put('/:id', tokenValidate, isAdmin, updateProduct)
+router.delete('/:id', tokenValidate, isAdmin, deleteProduct)
 
 export default router;
