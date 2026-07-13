@@ -18,9 +18,9 @@ export const createProduct = async (req: Request, res: Response) => {
         if (!userId) {
             return fail(res, "Authentication token missing", 401);
         }
-        const { name, description, price, category } = req.body;
+        const { name, description, price, category, image } = req.body;
         await Product.create({
-            name, description, price, category, createdBy: userId
+            name, description, price, category, image, createdBy: userId
         })
         return success(res, "Product created successfully!", null, 201)
     } catch (error: any) {

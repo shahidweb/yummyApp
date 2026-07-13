@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const ROLES = Object.freeze({
+export const ROLES = Object.freeze({
     ADMIN: 'admin',
     USER: 'user',
 });

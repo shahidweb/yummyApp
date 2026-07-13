@@ -10,6 +10,9 @@ export type APIResponse<T = null> = {
 const api = axios.create({
     baseURL: DEV_URL,
     withCredentials: true,
+    headers: {
+        'Content-Type': 'application/json'
+    }
 })
 
 api.interceptors.response.use(
