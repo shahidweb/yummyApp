@@ -26,7 +26,7 @@ function AppRoutes() {
 
             <Route path={ROUTES.ADMIN.DASHBOARD} element={<AdminRoute><AdminLayout /></AdminRoute>}>
                 <Route index element={<Dashboard />} />
-                <Route path={ROUTES.ADMIN.ADD_PRODUCT} element={<AddProduct />} />
+                <Route path={`${ROUTES.ADMIN.ADD_PRODUCT}/:id?`} element={<AddProduct />} />
                 <Route path={ROUTES.ADMIN.VIEW_PRODUCT} element={<Products />} />
                 <Route path={ROUTES.ADMIN.ORDER} element={<Orders />} />
             </Route>

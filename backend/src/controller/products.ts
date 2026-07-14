@@ -19,10 +19,11 @@ export const createProduct = async (req: Request, res: Response) => {
             return fail(res, "Authentication token missing", 401);
         }
         const { name, description, price, category, image } = req.body;
-        await Product.create({
+        const product = await Product.create({
             name, description, price, category, image, createdBy: userId
         })
-        return success(res, "Product created successfully!", null, 201)
+        const newProduct = { _id: product._id, ...req.body }
+        return success(res, "Product created successfully!", newProduct)
     } catch (error: any) {
         return fail(res, (error.message || "Internal server error"));
     }
@@ -37,18 +38,17 @@ export const updateProduct = async (req: Request, res: Response) => {
         const { name, description, price, category } = req.body;
 
         const updateData: any = {};
+
         if (name !== undefined) updateData.name = name;
         if (description !== undefined) updateData.description = description;
         if (price !== undefined) updateData.price = price;
         if (category !== undefined) updateData.category = category;
-        const product = await Product.findByIdAndUpdate(id,
-            updateData,
-            { returnDocument: "after" }
-        );
-        if (!product) {
-            return fail(res, "Product not found", 400);
-        }
-        return success(res, "Product updated successfully!", product)
+
+        const product = await Product.findByIdAndUpdate(id, updateData, { returnDocument: "after" });
+        if (!product) return fail(res, "Product not found", 400);
+
+        const updatedProduct = { _id: product._id, name, description, price, category }
+        return success(res, "Product updated successfully!", updatedProduct)
 
     } catch (error: any) {
         return fail(res, (error.message || "Internal server error"));
