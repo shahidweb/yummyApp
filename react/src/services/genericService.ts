@@ -38,7 +38,7 @@ export const apiService = {
         return response.data
     },
     delete: async<T>(url: string, id: number | string): Promise<T> => {
-        const response = await api.delete<T>(`${url}/$${id}`);
+        const response = await api.delete<T>(`${url}/${id}`);
         return response.data;
     }
 }

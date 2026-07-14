@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
+import { useNavigate, useParams } from "react-router-dom";
 import uploadImage from "../../assets/upload-icon.png";
 import { apiService, type APIResponse } from "../../services/genericService";
 import { ENDPOINT } from "../../shared/constants/api_urls";
 import { PRODUCT_CATEGORIES } from "../../shared/constants/order";
+import { ROUTES } from "../../shared/constants/routePaths";
 import { notify } from "../../shared/utils/toast";
-import { useAppDispatch } from "../../store/hooks";
-import { fetchProducts } from "../../store/slices/productSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { selectProducts } from "../../store/selectors/productSelectors";
+import { addProduct, updateProduct, type ProductType } from "../../store/slices/productSlice";
 
 type Inputs = {
     name: string;
@@ -22,11 +25,30 @@ const inputClass =
 
 function AddProduct() {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate()
+    const { id } = useParams();
 
+    const products = useAppSelector(selectProducts);
     const [preview, setPreview] = useState<string>("");
     const [loading, setLoading] = useState(false);
+    const [selectProduct, setSelecteProduct] = useState<ProductType | null>(null)
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<Inputs>();
+
+    useEffect(() => {
+        if (!id) return;
+        const findProduct = products.find(product => product._id === id);
+        if (findProduct?._id) {
+            reset({
+                name: findProduct.name,
+                category: findProduct.category,
+                description: findProduct.description,
+                price: findProduct.price,
+            });
+            setSelecteProduct(findProduct)
+            setPreview(findProduct.image)
+        }
+    }, [id, reset])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -47,17 +69,22 @@ function AddProduct() {
                 price: Number(data.price),
             };
 
-            const response = await apiService.post<APIResponse<null>, typeof payload>(ENDPOINT.PRODUCTS, payload);
-            if (response.success) {
-                notify.success(response.message);
+            const isEditMode = Boolean(selectProduct?._id);
 
-                reset();
-                setPreview("");
+            const response = isEditMode
+                ? await apiService.put<APIResponse<ProductType>, typeof payload>(ENDPOINT.PRODUCTS, selectProduct!._id, payload)
+                : await apiService.post<APIResponse<ProductType>, typeof payload>(ENDPOINT.PRODUCTS, payload);
 
-                dispatch(fetchProducts());
-            }
+            if (!response.success || !response.data) return;
+            isEditMode ? dispatch(updateProduct(response.data)) : dispatch(addProduct(response.data));
+            setSelecteProduct(null)
+            setPreview("");
+            reset();
+            notify.success(response.message);
+            navigate(ROUTES.ADMIN.VIEW_PRODUCT);
+
         } catch (error: any) {
-            notify.error(error?.response?.data?.message ?? "Something went wrong.");
+            notify.error(error?.message);
         } finally {
             setLoading(false);
         }
@@ -77,7 +104,7 @@ function AddProduct() {
                             </label>
                             <input id="image" type="file" accept="image/*" className="hidden"
                                 {...register("image", {
-                                    required: "Please select an image",
+                                    required: !preview ? "Please select an image" : false,
                                     validate: {
                                         fileSize: (files) => !files[0] || files[0].size <= 10 * 1024 * 1024 || "Maximum size is 10MB",
                                         fileType: (files) => !files[0] || ["image/jpeg", "image/png", "image/webp"].includes(files[0].type) || "Only JPG, PNG & WebP allowed",
@@ -127,7 +154,7 @@ function AddProduct() {
                         <button disabled={loading} type="submit"
                             className="bg-black text-white px-10 py-3 rounded-md hover:bg-gray-800 disabled:bg-gray-500 disabled:cursor-not-allowed transition"
                         >
-                            {loading ? "Adding..." : "ADD"}
+                            {loading ? (id ? "Updating..." : "Adding...") : (id ? "Update" : "ADD")}
                         </button>
                     </form>
                 </div>

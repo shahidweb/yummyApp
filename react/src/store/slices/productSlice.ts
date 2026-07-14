@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import greekSalad from "../../assets/greeksalad.png";
 import { apiService, type APIResponse } from "../../services/genericService";
-import type { RootState } from "../store";
 import { ENDPOINT } from "../../shared/constants/api_urls";
+import type { RootState } from "../store";
 
 export type ProductType = {
     _id: string;
@@ -46,7 +46,17 @@ const initialState: ProductState = { products: [], loading: false, error: null, 
 export const productSlice = createSlice({
     name: "product",
     initialState,
-    reducers: {},
+    reducers: {
+        addProduct: (state, action: PayloadAction<ProductType>) => {
+            state.products = [...state.products, action.payload]
+        },
+        updateProduct: (state, action: PayloadAction<ProductType>) => {
+            state.products = state.products.map(product => product._id === action.payload._id ? { ...product, ...action.payload } : product)
+        },
+        removeProduct: (state, action: PayloadAction<string>) => {
+            state.products = state.products.filter(item => item._id !== action.payload);
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchProducts.pending, (state) => {
@@ -68,6 +78,6 @@ export const productSlice = createSlice({
     }
 })
 
-
+export const { addProduct, updateProduct, removeProduct } = productSlice.actions
 
 export default productSlice.reducer
