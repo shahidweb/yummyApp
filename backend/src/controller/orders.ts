@@ -34,7 +34,6 @@ export const createOrder = async (req: Request, res: Response) => {
         }
 
         await MyOrder.create({
-            status: "Pending",
             items: orderItems,
             total_price: totalPrice,
             currency: "USD",
@@ -55,10 +54,45 @@ export const getMyOrder = async (req: Request, res: Response) => {
         }
 
         const orders = await MyOrder.find({ orderedBy: userId })
-        if (orders.length === 0) {
-            return fail(res, "No orders found", 404);
-        }
         return success(res, "Orders History", orders)
+
+    } catch (error: any) {
+        return fail(res, (error.message || "Internal server error"));
+    }
+}
+
+
+//#Admin Controller
+export const getAllOrders = async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).user.id;
+        if (!userId) {
+            return fail(res, "Authentication token missing", 401);
+        }
+        const allOrders = await MyOrder.find().select('-__v').lean();
+        return success(res, 'All users Orders', allOrders)
+
+    } catch (error: any) {
+        return fail(res, (error.message || "Internal server error"));
+    }
+}
+
+//#Admin Controller
+export const orderStatus = async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).user.id;
+        if (!userId) {
+            return fail(res, "Authentication token missing", 401);
+        }
+        const { id } = req.params;
+        const { status } = req.body;
+
+        const order = await MyOrder.findByIdAndUpdate(id, { status }, { returnDocument: "after", runValidators: true });
+        if (!order) {
+            return fail(res, "Order not found", 404);
+        }
+        const allOrders = await MyOrder.find().select('-__v').lean();
+        return success(res, 'All users Orders', allOrders)
 
     } catch (error: any) {
         return fail(res, (error.message || "Internal server error"));

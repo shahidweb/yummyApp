@@ -26,16 +26,9 @@ const addressSchema = new Schema(
 const myOrderSchema = new Schema(
     {
         status: {
-            type: String, required: true,
-            enum: [
-                "Pending",
-                "Food Processing",
-                "Preparing",
-                "Out For Delivery",
-                "Delivered",
-                "Cancelled",
-            ],
-            default: "Pending",
+            type: Number, required: true,
+            enum: [1, 2, 3, 4, 5],
+            default: 1,
         },
         items: { type: [orderItemSchema], required: true },
         deliveryAddress: { type: addressSchema, required: true },
