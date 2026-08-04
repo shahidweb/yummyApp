@@ -1,11 +1,12 @@
 import { ArchiveBoxIcon } from "@heroicons/react/16/solid";
 import { useEffect, useState } from "react";
-import { apiService, type APIResponse } from "../../services/genericService";
-import { formatCurrency } from "../../shared/utils/cartFn";
-import { ENDPOINT } from "../../shared/constants/api_urls";
-import { notify } from "../../shared/utils/toast";
 import NoFound from "../../components/user/sections/NoFound";
+import { apiService, type APIResponse } from "../../services/genericService";
+import { ENDPOINT } from "../../shared/constants/api_urls";
+import { ORDER_STATUS } from "../../shared/constants/order";
 import type { TOrderType } from "../../shared/types/orders";
+import { formatCurrency } from "../../shared/utils/cartFn";
+import { notify } from "../../shared/utils/toast";
 
 
 
@@ -65,10 +66,14 @@ function MyOrder() {
                             </div>
 
                             {/* Status */}
-                            <div className="w-40">
-                                <span className="text-orange-500 mr-1">●</span>
-                                <span>{order.status}</span>
-                            </div>
+                            {ORDER_STATUS.map(s =>
+                                s.value === order.status ?
+                                    <div key={s.value} className="w-40">
+                                        <span className={`mr-1 ${s.textColor}`}>●</span>
+                                        <span className={`mr-1 ${s.textColor}`}>{s.label}</span>
+                                    </div>
+                                    : ''
+                            )}
 
                             {/* Track Button */}
                             <div>
