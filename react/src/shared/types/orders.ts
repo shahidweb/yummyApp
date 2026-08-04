@@ -1,6 +1,6 @@
 
 export type IDeliveryAddress = {
-    fullName:string;
+    fullName: string;
     fname: string;
     lname: string;
     email: string;
@@ -21,9 +21,13 @@ export type TItems = {
 
 export type TOrderType = {
     _id: string;
-    status: string;
+    status: number;
     items: TItems[];
     deliveryAddress: IDeliveryAddress;
     total_price: number,
     currency: string,
+}
+
+export type TOrderStatus = {
+    status: number;
 }

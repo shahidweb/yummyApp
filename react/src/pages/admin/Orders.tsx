@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { apiService, type APIResponse } from "../../services/genericService";
 import { ENDPOINT } from "../../shared/constants/api_urls";
 import { ORDER_STATUS } from "../../shared/constants/order";
-import type { TOrderType } from "../../shared/types/orders";
+import type { TOrderStatus, TOrderType } from "../../shared/types/orders";
 import { formatCurrency } from "../../shared/utils/cartFn";
 import { notify } from "../../shared/utils/toast";
 
@@ -16,7 +16,7 @@ function Orders() {
 
   const fetchOrders = async () => {
     try {
-      const response = await apiService.get<APIResponse<TOrderType[]>>(ENDPOINT.ORDER_HISTORY);
+      const response = await apiService.get<APIResponse<TOrderType[]>>(ENDPOINT.ORDER_ORDERS);
       if (response.success && Array.isArray(response.data))
         setOrders(response.data);
     } catch (error) {
@@ -26,9 +26,20 @@ function Orders() {
     }
   }
 
-  const onChangeStatus = (val: string) => {
-    console.log(val)
+  const onChangeStatus = async (id: string, statusId: string) => {
+    try {
+      const response = await apiService.put<APIResponse<TOrderType[]>, TOrderStatus>(ENDPOINT.ORDER_STATUS, id, { status: Number(statusId) });
+      if (response.success && Array.isArray(response.data))
+        setOrders(response.data);
+    } catch (error) {
+      setOrders([])
+      const err = error as Error;
+      notify.error(err.message)
+    }
   }
+
+  const currentStatus = (status: number) => ORDER_STATUS.find((s) => s.value === status) ?? ORDER_STATUS[0];
+
 
 
   return (
@@ -68,13 +79,17 @@ function Orders() {
 
               {/* Track Button */}
               <div>
-                <select onChange={(event) => onChangeStatus(event?.target.value)}
-                  className="outline-0 border-0 bg-red-100 hover:bg-red-100 px-6 py-3 rounded text-gray-700 cursor-pointer transition">
-                  <option className="cursor-pointer" selected>{ORDER_STATUS.PENDING}</option>
-                  <option className="cursor-pointer" value={ORDER_STATUS.PREPARING}>{ORDER_STATUS.PREPARING}</option>
-                  <option className="cursor-pointer" value={ORDER_STATUS.OUT_OF_DELIVERY}>{ORDER_STATUS.OUT_OF_DELIVERY}</option>
-                  <option className="cursor-pointer" value={ORDER_STATUS.DELIVERED}>{ORDER_STATUS.DELIVERED}</option>
-                  <option className="cursor-pointer" value={ORDER_STATUS.CANCELLED}>{ORDER_STATUS.CANCELLED}</option>
+                <select name="status" disabled={order.status > 3} value={order.status} onChange={(event) => onChangeStatus(order._id, event?.target.value)}
+                  className={`
+                    ${currentStatus(order.status).bgColor}                     
+                    ${order.status > 3
+                      ? "cursor-not-allowed opacity-60"
+                      : `hover:${currentStatus(order.status).textColor} cursor-pointer`
+                    }
+                      outline-0 border-0 px-6 py-3 rounded text-gray-700 transition`}>
+                  {ORDER_STATUS.map((status) => (
+                    <option key={status.value} disabled={status.value < order.status} value={status.value}>{status.label}</option>
+                  ))}
                 </select>
               </div>
             </div>
