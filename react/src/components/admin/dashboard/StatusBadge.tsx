@@ -1,33 +1,17 @@
+import { ORDER_STATUS } from "../../../shared/constants/order";
+
 type Props = {
-  status: string;
+  status: number;
 };
 
 function StatusBadge({ status }: Props) {
+  if (!status) return;
 
-  const styles = {
-    Pending:
-      "text-yellow-100 text-yellow-700",
-
-    Preparing:
-      "text-blue-100 text-blue-700",
-
-    Delivered:
-      "text-green-100 text-green-700",
-
-    Cancelled:
-      "text-red-100 text-red-700",
-  };
+  const orderStatus = ORDER_STATUS.find(sts => sts.value === status);
 
   return (
-    <span
-      className={`
-        text-xs
-        rounded-full
-        font-medium
-        ${styles[status as keyof typeof styles]}
-      `}
-    >
-      {status}
+    <span className={`text-xs rounded-full font-medium ${orderStatus?.textColor}`}>
+      {orderStatus?.label}
     </span>
   );
 }

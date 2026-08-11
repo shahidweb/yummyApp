@@ -12,8 +12,6 @@ export type IDeliveryAddress = {
     phone: string;
 }
 
-
-
 export type TItems = {
     name: string;
     quantity: number
@@ -26,8 +24,19 @@ export type TOrderType = {
     deliveryAddress: IDeliveryAddress;
     total_price: number,
     currency: string,
+    createdAt: string
 }
 
 export type TOrderStatus = {
     status: number;
+}
+
+
+export type TopSellingProduct = {
+    _id: number,
+    name: string,
+    orders: number,
+    price: number,
+    image: string
+    totalSold: number
 }

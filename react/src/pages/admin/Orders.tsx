@@ -1,38 +1,31 @@
 import { ArchiveBoxIcon } from "@heroicons/react/16/solid";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { apiService, type APIResponse } from "../../services/genericService";
 import { ENDPOINT } from "../../shared/constants/api_urls";
 import { ORDER_STATUS } from "../../shared/constants/order";
 import type { TOrderStatus, TOrderType } from "../../shared/types/orders";
 import { formatCurrency } from "../../shared/utils/cartFn";
 import { notify } from "../../shared/utils/toast";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { allAdminOrders, updateState } from "../../store/slices/orderSlice";
 
 function Orders() {
-  const [orders, setOrders] = useState<TOrderType[]>([])
+  const dispatch = useAppDispatch();
+  const orders = useAppSelector(state => state.myOrders.data);
 
   useEffect(() => {
-    fetchOrders();
+    dispatch(allAdminOrders());
   }, [])
 
-  const fetchOrders = async () => {
-    try {
-      const response = await apiService.get<APIResponse<TOrderType[]>>(ENDPOINT.ORDER_ORDERS);
-      if (response.success && Array.isArray(response.data))
-        setOrders(response.data);
-    } catch (error) {
-      setOrders([])
-      const err = error as Error;
-      notify.error(err.message)
-    }
-  }
 
   const onChangeStatus = async (id: string, statusId: string) => {
     try {
       const response = await apiService.put<APIResponse<TOrderType[]>, TOrderStatus>(ENDPOINT.ORDER_STATUS, id, { status: Number(statusId) });
-      if (response.success && Array.isArray(response.data))
-        setOrders(response.data);
+      if (response.success && Array.isArray(response.data)) {
+        dispatch(updateState({ id, status: Number(statusId) }))
+        notify.success(response.message)
+      }
     } catch (error) {
-      setOrders([])
       const err = error as Error;
       notify.error(err.message)
     }
