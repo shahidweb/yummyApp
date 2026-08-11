@@ -1,37 +1,23 @@
-import greekSalad from "../../../assets/greeksalad.png";
+import { useEffect, useState } from "react";
+import defaultImage from "../../../assets/greeksalad.png";
+import { apiService, type APIResponse } from "../../../services/genericService";
+import type { TopSellingProduct } from "../../../shared/types/orders";
+import { ENDPOINT } from "../../../shared/constants/api_urls";
 
 function TopProducts() {
+    const [products, setProducts] = useState<TopSellingProduct[]>([]);
 
-    const products = [
-        {
-            id: 1,
-            name: "Greek Salad",
-            orders: 120,
-            price: 12,
-            image: greekSalad
-        },
-        {
-            id: 2,
-            name: "Veg Burger",
-            orders: 95,
-            price: 10,
-            image: greekSalad
-        },
-        {
-            id: 3,
-            name: "Pizza",
-            orders: 82,
-            price: 18,
-            image: greekSalad
-        },
-        {
-            id: 4,
-            name: "Pasta",
-            orders: 76,
-            price: 15,
-            image: greekSalad
+    useEffect(() => {
+        fetchTopProducts();
+    }, [])
+
+
+    const fetchTopProducts = async () => {
+        const response = await apiService.get<APIResponse<TopSellingProduct[]>>(ENDPOINT.TOP_SELLING_PRODUCTS);
+        if (response.success && response.data) {
+            setProducts(response.data)
         }
-    ];
+    }
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -41,9 +27,9 @@ function TopProducts() {
             </div>
             <div>
                 {products.map(product => (
-                    <div key={product.id} className="flex justify-between items-center py-2.5 hover:bg-gray-50 transition">
+                    <div key={product._id} className="flex justify-between items-center py-2.5 hover:bg-gray-50 transition">
                         <div className="flex items-center gap-4">
-                            <img src={product.image} alt={product.name} className="w-12 h-12 rounded-lg object-cover" />
+                            <img src={product.image ? product.image : defaultImage} alt={product.name} className="w-12 h-12 rounded-lg object-cover" />
                             <div>
                                 <h3 className="font-semibold">{product.name}</h3>
                                 <p className="text-sm text-gray-500">₹{product.price}</p>

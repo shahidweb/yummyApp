@@ -30,3 +30,13 @@ export type TOrderType = {
 export type TOrderStatus = {
     status: number;
 }
+
+
+export type TopSellingProduct = {
+    _id: number,
+    name: string,
+    orders: number,
+    price: number,
+    image: string
+    totalSold: number
+}
