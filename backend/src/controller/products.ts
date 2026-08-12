@@ -154,7 +154,7 @@ export const topSellingProduct = async (req: Request, res: Response) => {
             // Highest quantity sold first
             {
                 $sort: {
-                    totalSold: -1,
+                    orders: -1,
                 },
             },
 

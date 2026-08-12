@@ -1,8 +1,9 @@
 import type { ForwardRefExoticComponent, SVGProps } from "react";
+import { formatCurrency } from "../../../shared/utils/cartFn";
 
 type Props = {
     title: string;
-    value: number | string;
+    value: number;
     color: string;
     icon: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
 };
@@ -18,7 +19,7 @@ function Card({
             <div className="flex justify-between items-center">
                 <div>
                     <p className="text-gray-500 text-sm"> {title}</p>
-                    <h2 className="text-3xl font-bold mt-2">{value}</h2>
+                    <h2 className="text-3xl font-bold mt-2">{title === 'Revenue' ? formatCurrency(value) : value}</h2>
                 </div>
                 <div className={`${color} p-4 rounded-full`}>
                     <Icon className="w-8 h-8" />

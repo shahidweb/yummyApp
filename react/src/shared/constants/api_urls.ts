@@ -9,5 +9,6 @@ export const ENDPOINT = {
     ORDER_CREATED: "order/place-order",
     ORDER_ORDERS: "order/all-orders",
     ORDER_STATUS: "order/order-status",
-    TOP_SELLING_PRODUCTS: "product/top-selling"
+    TOP_SELLING_PRODUCTS: "product/top-selling",
+    ADMIN_DASHBOARD_SUMMARY: "dashboard"
 }

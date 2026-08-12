@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import defaultImage from "../../../assets/greeksalad.png";
 import { apiService, type APIResponse } from "../../../services/genericService";
-import type { TopSellingProduct } from "../../../shared/types/orders";
 import { ENDPOINT } from "../../../shared/constants/api_urls";
+import type { TopSellingProduct } from "../../../shared/types/orders";
+import { notify } from "../../../shared/utils/toast";
 
 function TopProducts() {
     const [products, setProducts] = useState<TopSellingProduct[]>([]);
@@ -13,9 +14,15 @@ function TopProducts() {
 
 
     const fetchTopProducts = async () => {
-        const response = await apiService.get<APIResponse<TopSellingProduct[]>>(ENDPOINT.TOP_SELLING_PRODUCTS);
-        if (response.success && response.data) {
-            setProducts(response.data)
+        try {
+            const response = await apiService.get<APIResponse<TopSellingProduct[]>>(ENDPOINT.TOP_SELLING_PRODUCTS);
+            if (response.success && response.data) {
+                setProducts(response.data)
+                notify.success(response.message)
+            }
+        } catch (error) {
+            const err = error as Error;
+            notify.error(err.message)
         }
     }
 
