@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { apiService, type APIResponse } from "../services/genericService";
 import { notify } from "../shared/utils/toast";
-import { successMessages } from "../shared/utils/toastMessage";
 
 type formInput = {
   name?: string;
@@ -12,7 +11,8 @@ type formInput = {
 };
 
 function Login({ onClose }: any) {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [loginError, setLoginError] = useState<string>('');
   const { fetchUser } = useAuth();
   const {
     register,
@@ -22,17 +22,17 @@ function Login({ onClose }: any) {
   } = useForm<formInput>();
 
   const OnSubmitHandler = async (data: formInput) => {
+    setLoginError('')
     try {
       const response = await apiService.post<APIResponse<null>, formInput>(`${isLogin ? "login" : "register"}`, data);
       if (response && response.success) {
         await fetchUser()
-        notify.success(successMessages.LOGIN)
+        notify.success(response.message)
       }
       onClose();
     } catch (error) {
       const err = error as Error;
-      notify.error(err.message)
-      onClose();
+      setLoginError(err.message)
     }
   };
 
@@ -71,7 +71,7 @@ function Login({ onClose }: any) {
           {isLogin ? "Login" : "Create Account"}
         </button>
       </form>
-      <div className="cursor-pointer mt-3 mb-10">
+      {/* <div className="cursor-pointer mt-3 mb-10">
         <input
           id="agreement"
           className="cursor-pointer h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 me-3"
@@ -80,8 +80,13 @@ function Login({ onClose }: any) {
         <label htmlFor="agreement" className="cursor-pointer">
           By continuing, I agree to the terms of use & privacy policy
         </label>
-      </div>
-      <p>
+      </div> */}
+      {loginError && (
+        <p className="mt-2 text-sm text-red-500">
+          {loginError}
+        </p>
+      )}
+      <p className="mt-5">
         {" "}
         {isLogin ? "Create a account? " : "Already have an account? "}
         <span
