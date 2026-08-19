@@ -5,12 +5,11 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { ENDPOINT } from "../shared/constants/api_urls";
-import { apiService, type APIResponse } from "../services/genericService";
-import { notify } from "../shared/utils/toast";
-import { errorMessages, successMessages } from "../shared/utils/toastMessage";
 import { useNavigate } from "react-router-dom";
+import { apiService, type APIResponse } from "../services/genericService";
+import { ENDPOINT } from "../shared/constants/api_urls";
 import { ROUTES } from "../shared/constants/routePaths";
+import { notify } from "../shared/utils/toast";
 
 export const ROLES = {
   ADMIN: "admin",
@@ -59,17 +58,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const login = (userData: IUser) => {
-    setUser(userData)
-  }
+  const login = (userData: IUser) => setUser(userData)
 
   const logout = async () => {
     try {
-      await apiService.post(ENDPOINT.LOGOUT, '');
+      const response = await apiService.post<APIResponse<null>, {}>(ENDPOINT.LOGOUT, {});
       setUser(null);
-      notify.success(successMessages.LOGOUT)
+      notify.success(response.message)
     } catch (error) {
-      notify.error(errorMessages.loginFailed)
+      const err = error as Error;
+      notify.error(err.message)
     }
   }
 

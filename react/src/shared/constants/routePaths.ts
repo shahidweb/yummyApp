@@ -5,7 +5,9 @@ export const ROUTES = {
     ORDER: "/order",
     MYORDER: "/myorder",
     MENU: "/menu",
-    CONTACT: "/contact"
+    CONTACT: "/contact",
+    APP: "/app",
+    PROFILE: "/profile"
   },
   ADMIN: {
     DASHBOARD: "/admin",
