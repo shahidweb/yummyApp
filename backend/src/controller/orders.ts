@@ -53,7 +53,7 @@ export const getMyOrder = async (req: Request, res: Response) => {
             return fail(res, "Authentication token missing", 401);
         }
 
-        const orders = await MyOrder.find({ orderedBy: userId })
+        const orders = await MyOrder.find({ orderedBy: userId }).sort({createdAt:-1})
         return success(res, "Orders History", orders)
 
     } catch (error: any) {
@@ -69,7 +69,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
         if (!userId) {
             return fail(res, "Authentication token missing", 401);
         }
-        const allOrders = await MyOrder.find().select('-__v').lean();
+        const allOrders = await MyOrder.find().sort({createdAt:-1}).select('-__v').lean();
         return success(res, 'All users Orders', allOrders)
 
     } catch (error: any) {
